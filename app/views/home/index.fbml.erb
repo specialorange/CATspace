@@ -1,0 +1,22 @@
+<script type="text/javascript" charset="utf-8">
+	function deleteActivityItem(id) {
+	  url = '<%= url_for(:controller => "activity_items", :action => "destroy", :canvas => false, :only_path => false,
+	  request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
+	  ajaxDeleteItem( id , url,'activity-'+id); 
+	  return false;
+	}
+</script>
+<div id="contentPanel">
+<div class="boxHeaderFlexible">Recent Activity</div>
+<ul>
+<% for activity_item in @activity_items %>
+  <div id="activity-<%=activity_item.id%>">
+	    <%= fb_name(activity_item.facebook_user.uid, options={:linked => true, :useyou => true}) %> <%= activity_item.sentence%> <%= link_to activity_item.assignment.title, :controller=>"assignments",:action=>"show",:id => activity_item.assignment.id  %> 
+	<% if @fb_user.id == activity_item.facebook_user.id %>
+	(<%= link_to "X", "#", :onclick => "deleteActivityItem(#{activity_item.id})" %>)
+	<% end %>
+  </div>
+<% end %>
+</ul>
+</div>
+<div id="rightPanel">Hello</div>

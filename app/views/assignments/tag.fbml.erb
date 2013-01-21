@@ -1,0 +1,8 @@
+<div class="boxHeaderFlexible">All assignments tagged with '<font color="blue"><%= @tag %></font>'</div><br>
+
+<% for assignment in @assignments %>
+<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
+<% end %>
+
+<%= link_to 'All Assignments', assignments_url%>
+<br />

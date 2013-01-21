@@ -1,0 +1,7 @@
+<table border="0" cellspacing="5" cellpadding="2">
+	<tr>
+		<td><%= fb_profile_pic(@facebook_session.user.id, options={:size => :normal}) %></td>
+		<td width="90%" valign="top"><h1><%= fb_name(@facebook_session.user.id, options={:linked => false, :useyou => false}) %></h1></td>		
+		</tr>
+
+</table> 

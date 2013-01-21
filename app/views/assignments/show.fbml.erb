@@ -1,0 +1,83 @@
+<script type="text/javascript" charset="utf-8">
+function doAjaxInPlaceEdit(field) {
+	document.getElementById(field+'_field').setStyle("display","none");
+	document.getElementById(field+'_editing_section').setStyle("display","block");	
+	document.getElementById(field+'_saving_section').setStyle("display","none");		
+  return false;
+}
+
+function doAjaxInPlaceSave(field) {
+	document.getElementById(field+'_saving_section').setStyle("display","block");		
+	id = <%=@assignment.id%>;
+	value = document.getElementById(field+'_editor').getValue();
+	url = '<%= url_for(:action => "edit_field", :canvas => false, :only_path => false,
+  request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
+	ajaxUpdateField(id, field, value, url);
+  return false;
+}
+
+function doAjaxInPlaceCancel(field) {
+	document.getElementById(field+'_field').setStyle("display","block");
+	document.getElementById(field+'_editing_section').setStyle("display","none");		
+	document.getElementById(field+'_saving_section').setStyle("display","none");		
+  return false;
+}	
+</script>
+<p>
+  <div class="assignmentTitle"><div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');"><%= @assignment.title %></div></div>
+<div id="title_editing_section" style="display:none;">
+<input type="text" size="<%= @assignment.title.length%>" id="title_editor" value="<%=@assignment.title%>"/> <input type="button" value="Save" 
+onClick="doAjaxInPlaceSave('title');" /> Or <input type="button" value="Cancel" onClick="doAjaxInPlaceCancel('title');"/>
+</div>
+<div id="title_saving_section" style="display:none;">
+<i>Saving...</i>
+</div>
+
+  <b>Author:</b>
+  <%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => true) %>
+</p>
+<p>
+  <b>Tags: </b>
+  <%= render :partial => "linked_tag_list", :locals => { :list => @assignment.tag_list } %>
+</p>
+<p>
+  <b>Rating: </b>
+  <%= @assignment.rating%> <small>(Rated <%= @assignment.ratings.size%> times.)</small>
+<%= form_tag :action => "rate", :id => @assignment %>
+<%= select :rating, :value, {"-"=>"0","*" => "1","**"=>"2","***"=>"3","****"=>"4","*****"=>"5"} %>
+<%= submit_tag "Rate!"%>
+</form>
+</p>
+<p>
+  <b>Synopsis:</b>
+  <div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= textilize(@assignment.synopsis) %></div>
+<div id="synopsis_editing_section" style="display:none;">
+<textarea rows="20" cols="80" id="synopsis_editor"><%=@assignment.synopsis%></textarea><br><input type="button" value="Save" 
+onClick="doAjaxInPlaceSave('synopsis');" /> Or <input type="button" value="Cancel" onClick="doAjaxInPlaceCancel('synopsis');"/>
+</div>
+<div id="synopsis_saving_section" style="display:none;">
+Saving...
+</div>
+</p>
+<div class="boxHeaderFlexible">Comments</div>
+<% for comment in @assignment.comments %>
+<div id="comment">
+<div id="commentUserIcon"><%= fb_profile_pic(comment.facebook_user.uid, options={:size => :thumb}) %></div>
+<div id="commentText"><%= textilize(comment.body) %>
+	<p><small>By <%= fb_name(comment.facebook_user.uid, options={:linked => true, :useyou => true})%></small></p>
+	</div>
+</div>
+<% end %>
+<div id="commentForm">
+<%= form_tag :action => "comment" , :id => @assignment%>
+	<%= text_area "comment", "body" %> <br>
+	<%= submit_tag "Comment!"%>
+</form>
+</div>
+<hr>
+
+
+<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
+<%= link_to 'All Assignments', assignments_path %><br>
+
+

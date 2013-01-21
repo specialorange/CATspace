@@ -1,0 +1,487 @@
+# Logfile created on Mon Mar 02 03:40:47 -0500 2009WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (44.4ms)[0m   [0;1mDROP DATABASE IF EXISTS `catspace`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mCREATE DATABASE `catspace` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (4.9ms)[0m   [0mCREATE TABLE `activity_items` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `facebook_user_id` int(11) NOT NULL, `assignment_id` int(11) NOT NULL, `sentence` varchar(255) NOT NULL, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (2.9ms)[0m   [0mCREATE TABLE `assignments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `title` varchar(255), `synopsis` text, `rating` int(11), `created_at` datetime, `updated_at` datetime, `facebook_user_id` int(11) NOT NULL, `pref_comment_notify` tinyint(1) DEFAULT 0, `attachment_name` varchar(255), `queue_flag` tinyint(1) DEFAULT 0) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mCREATE TABLE `comments` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `body` text, `created_at` datetime, `updated_at` datetime, `facebook_user_id` int(11) NOT NULL, `assignment_id` int(11) NOT NULL) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mCREATE TABLE `facebook_users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `uid` bigint NOT NULL, `session_key` varchar(255), `session_expires` varchar(255), `last_access` datetime, `created_at` datetime, `updated_at` datetime, `pref_comment_notify` tinyint(1) DEFAULT 0) ENGINE=InnoDB[0m
+  [4;36;1mSQL (18.8ms)[0m   [0;1mCREATE UNIQUE INDEX `index_facebook_users_on_uid` ON `facebook_users` (`uid`)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (3.7ms)[0m   [0;1mCREATE TABLE `ratings` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `rating` int(11) DEFAULT 0, `created_at` datetime NOT NULL, `rateable_type` varchar(15) NOT NULL, `rateable_id` int(11) DEFAULT 0 NOT NULL, `user_id` int(11) DEFAULT 0 NOT NULL) ENGINE=InnoDB[0m
+  [4;35;1mSQL (6.5ms)[0m   [0mCREATE INDEX `fk_ratings_user` ON `ratings` (`user_id`)[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (3.0ms)[0m   [0mCREATE TABLE `sessions` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `session_id` varchar(255) NOT NULL, `data` text, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (6.1ms)[0m   [0;1mCREATE INDEX `index_sessions_on_session_id` ON `sessions` (`session_id`)[0m
+  [4;35;1mSQL (6.5ms)[0m   [0mCREATE INDEX `index_sessions_on_updated_at` ON `sessions` (`updated_at`)[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (14.1ms)[0m   [0mCREATE TABLE `taggings` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `tag_id` int(11), `taggable_id` int(11), `taggable_type` varchar(255), `created_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (6.0ms)[0m   [0;1mCREATE INDEX `index_taggings_on_tag_id` ON `taggings` (`tag_id`)[0m
+  [4;35;1mSQL (6.5ms)[0m   [0mCREATE INDEX `index_taggings_on_taggable_id_and_taggable_type` ON `taggings` (`taggable_id`, `taggable_type`)[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mCREATE TABLE `tags` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (3.7ms)[0m   [0mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [4;36;1mSQL (17.2ms)[0m   [0;1mCREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSELECT version FROM `schema_migrations`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO `schema_migrations` (version) VALUES ('20090208070430')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO `schema_migrations` (version) VALUES ('20081014054252')[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO `schema_migrations` (version) VALUES ('20081006013729')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO `schema_migrations` (version) VALUES ('20081006014919')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO `schema_migrations` (version) VALUES ('20081005201012')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO `schema_migrations` (version) VALUES ('20081014061953')[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO `schema_migrations` (version) VALUES ('20080928060516')[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO `schema_migrations` (version) VALUES ('20081011224905')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO `schema_migrations` (version) VALUES ('20081110214624')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO `schema_migrations` (version) VALUES ('20081014182137')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mINSERT INTO `schema_migrations` (version) VALUES ('20081110211638')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mINSERT INTO `schema_migrations` (version) VALUES ('20081014063426')[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateAssignments (20080928060516)
+Migrating to CreateSessions (20081005201012)
+Migrating to CreateFacebookUsers (20081006013729)
+Migrating to AddAssignmentUserRelationship (20081006014919)
+Migrating to ActsAsTaggableMigration (20081011224905)
+Migrating to ActsAsRateableMigration (20081014054252)
+Migrating to CreateCommentsTable (20081014061953)
+Migrating to AddCommentRelationships (20081014063426)
+Migrating to CreateActivityItems (20081014182137)
+Migrating to AddPrefCommentNotifyToAssignment (20081110211638)
+Migrating to AddPrefCommentNotifyToFacebookUser (20081110214624)
+Migrating to AddAttachmentToAssignment (20090208070430)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `activity_items`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `activity_items`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `activity_items`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `activity_items`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW FIELDS FROM `assignments`[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mdescribe `assignments`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `assignments`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `assignments`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `comments`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `comments`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `comments`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `comments`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mSHOW FIELDS FROM `facebook_users`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `facebook_users`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `facebook_users`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `facebook_users`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `ratings`[0m
+  [4;36;1mSQL (81.8ms)[0m   [0;1mdescribe `ratings`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `ratings`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `ratings`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `sessions`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `sessions`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `sessions`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `sessions`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `taggings`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `taggings`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `taggings`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `taggings`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `tags`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `tags`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `tags`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `tags`[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateAssignments (20080928060516)
+Migrating to CreateSessions (20081005201012)
+Migrating to CreateFacebookUsers (20081006013729)
+Migrating to AddAssignmentUserRelationship (20081006014919)
+Migrating to ActsAsTaggableMigration (20081011224905)
+Migrating to ActsAsRateableMigration (20081014054252)
+Migrating to CreateCommentsTable (20081014061953)
+Migrating to AddCommentRelationships (20081014063426)
+Migrating to CreateActivityItems (20081014182137)
+Migrating to AddPrefCommentNotifyToAssignment (20081110211638)
+Migrating to AddPrefCommentNotifyToFacebookUser (20081110214624)
+Migrating to AddAttachmentToAssignment (20090208070430)
+Migrating to AddAffiliationToFacebookUsers (20090302085759)
+  [4;36;1mSQL (13.4ms)[0m   [0;1mALTER TABLE `facebook_users` ADD `affiliation` varchar(255)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090302085759')[0m
+Migrating to AddPublishFlagToAssignment (20090303094203)
+  [4;36;1mSQL (6.6ms)[0m   [0;1mALTER TABLE `assignments` ADD `published` tinyint(1) DEFAULT 0[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090303094203')[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `activity_items`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `activity_items`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `activity_items`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `activity_items`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW FIELDS FROM `assignments`[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mdescribe `assignments`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `assignments`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `assignments`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `comments`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `comments`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `comments`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `comments`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mSHOW FIELDS FROM `facebook_users`[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mdescribe `facebook_users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `facebook_users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `facebook_users`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `ratings`[0m
+  [4;36;1mSQL (75.9ms)[0m   [0;1mdescribe `ratings`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `ratings`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `ratings`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `sessions`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `sessions`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `sessions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `sessions`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `taggings`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `taggings`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `taggings`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `taggings`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW FIELDS FROM `tags`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `tags`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `tags`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `tags`[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateAssignments (20080928060516)
+Migrating to CreateSessions (20081005201012)
+Migrating to CreateFacebookUsers (20081006013729)
+Migrating to AddAssignmentUserRelationship (20081006014919)
+Migrating to ActsAsTaggableMigration (20081011224905)
+Migrating to ActsAsRateableMigration (20081014054252)
+Migrating to CreateCommentsTable (20081014061953)
+Migrating to AddCommentRelationships (20081014063426)
+Migrating to CreateActivityItems (20081014182137)
+Migrating to AddPrefCommentNotifyToAssignment (20081110211638)
+Migrating to AddPrefCommentNotifyToFacebookUser (20081110214624)
+Migrating to AddAttachmentToAssignment (20090208070430)
+Migrating to AddAffiliationToFacebookUsers (20090302085759)
+Migrating to AddPublishFlagToAssignment (20090303094203)
+Migrating to CreateAuthorships (20090328062157)
+  [4;36;1mSQL (10.0ms)[0m   [0;1mCREATE TABLE `authorships` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `facebook_user_uid` int(11) NOT NULL, `assignment_id` int(11) NOT NULL, `role` int(11) DEFAULT 1, `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090328062157')[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `activity_items`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `activity_items`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `activity_items`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `activity_items`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mSHOW FIELDS FROM `assignments`[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mdescribe `assignments`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `assignments`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `assignments`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `authorships`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `authorships`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `authorships`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `authorships`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `comments`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `comments`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW KEYS FROM `comments`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `comments`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `facebook_users`[0m
+  [4;36;1mSQL (67.7ms)[0m   [0;1mdescribe `facebook_users`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `facebook_users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `facebook_users`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `ratings`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `ratings`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `ratings`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `ratings`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `sessions`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `sessions`[0m
+  [4;35;1mSQL (1.6ms)[0m   [0mSHOW KEYS FROM `sessions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `sessions`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `taggings`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `taggings`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW KEYS FROM `taggings`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `taggings`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW FIELDS FROM `tags`[0m
+  [4;36;1mSQL (57.5ms)[0m   [0;1mdescribe `tags`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `tags`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `tags`[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateAssignments (20080928060516)
+Migrating to CreateSessions (20081005201012)
+Migrating to CreateFacebookUsers (20081006013729)
+Migrating to AddAssignmentUserRelationship (20081006014919)
+Migrating to ActsAsTaggableMigration (20081011224905)
+Migrating to ActsAsRateableMigration (20081014054252)
+Migrating to CreateCommentsTable (20081014061953)
+Migrating to AddCommentRelationships (20081014063426)
+Migrating to CreateActivityItems (20081014182137)
+Migrating to AddPrefCommentNotifyToAssignment (20081110211638)
+Migrating to AddPrefCommentNotifyToFacebookUser (20081110214624)
+Migrating to AddAttachmentToAssignment (20090208070430)
+Migrating to AddAffiliationToFacebookUsers (20090302085759)
+Migrating to AddPublishFlagToAssignment (20090303094203)
+Migrating to CreateAuthorships (20090328062157)
+Migrating to AddPropertyFieldsToAssignment (20090414113040)
+  [4;36;1mSQL (31.9ms)[0m   [0;1mALTER TABLE `assignments` ADD `prop_language` varchar(255)[0m
+  [4;35;1mSQL (8.7ms)[0m   [0mALTER TABLE `assignments` ADD `prop_language_version` varchar(255)[0m
+  [4;36;1mSQL (28.3ms)[0m   [0;1mALTER TABLE `assignments` ADD `prop_license` varchar(255)[0m
+  [4;35;1mSQL (7.4ms)[0m   [0mALTER TABLE `assignments` ADD `prop_license_url` varchar(255)[0m
+  [4;36;1mSQL (7.9ms)[0m   [0;1mALTER TABLE `assignments` ADD `prop_course` varchar(255)[0m
+  [4;35;1mSQL (9.1ms)[0m   [0mALTER TABLE `assignments` ADD `prop_info_url` varchar(255)[0m
+  [4;36;1mSQL (7.7ms)[0m   [0;1mALTER TABLE `assignments` ADD `prop_estimated_experience` varchar(255)[0m
+  [4;35;1mSQL (13.4ms)[0m   [0mALTER TABLE `assignments` ADD `prop_estimated_time` varchar(255)[0m
+  [4;36;1mSQL (8.5ms)[0m   [0;1mALTER TABLE `assignments` ADD `prop_estimated_size` varchar(255)[0m
+  [4;35;1mSQL (25.0ms)[0m   [0mALTER TABLE `assignments` ADD `prop_copyright` varchar(255)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090414113040')[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `activity_items`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `activity_items`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `activity_items`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `activity_items`[0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1mSHOW FIELDS FROM `assignments`[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mdescribe `assignments`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `assignments`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW CREATE TABLE `assignments`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW FIELDS FROM `authorships`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mdescribe `authorships`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `authorships`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `authorships`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW FIELDS FROM `comments`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mdescribe `comments`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `comments`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `comments`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `facebook_users`[0m
+  [4;35;1mSQL (70.0ms)[0m   [0mdescribe `facebook_users`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `facebook_users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `facebook_users`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW FIELDS FROM `ratings`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `ratings`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `ratings`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `ratings`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW FIELDS FROM `sessions`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `sessions`[0m
+  [4;36;1mSQL (2.0ms)[0m   [0;1mSHOW KEYS FROM `sessions`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `sessions`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `taggings`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `taggings`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW KEYS FROM `taggings`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `taggings`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW FIELDS FROM `tags`[0m
+  [4;35;1mSQL (58.2ms)[0m   [0mdescribe `tags`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW KEYS FROM `tags`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `tags`[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateAssignments (20080928060516)
+Migrating to CreateSessions (20081005201012)
+Migrating to CreateFacebookUsers (20081006013729)
+Migrating to AddAssignmentUserRelationship (20081006014919)
+Migrating to ActsAsTaggableMigration (20081011224905)
+Migrating to ActsAsRateableMigration (20081014054252)
+Migrating to CreateCommentsTable (20081014061953)
+Migrating to AddCommentRelationships (20081014063426)
+Migrating to CreateActivityItems (20081014182137)
+Migrating to AddPrefCommentNotifyToAssignment (20081110211638)
+Migrating to AddPrefCommentNotifyToFacebookUser (20081110214624)
+Migrating to AddAttachmentToAssignment (20090208070430)
+Migrating to AddAffiliationToFacebookUsers (20090302085759)
+Migrating to AddPublishFlagToAssignment (20090303094203)
+Migrating to CreateAuthorships (20090328062157)
+Migrating to AddPropertyFieldsToAssignment (20090414113040)
+Migrating to DownloadCounter (20090421182228)
+  [4;36;1mSQL (12.5ms)[0m   [0;1mALTER TABLE `assignments` ADD `stat_downloads` bigint[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20090421182228')[0m
+Migrating to UpdateDownloadCounter (20090421183037)
+  [4;36;1mSQL (2.1ms)[0m   [0;1mSHOW FIELDS FROM `assignments`[0m
+  [4;35;1mSQL (8.5ms)[0m   [0mALTER TABLE `assignments` CHANGE `stat_downloads` `stat_downloads` bigint DEFAULT 0[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090421183037')[0m
+Migrating to CreateDownloadItems (20090422200819)
+  [4;35;1mSQL (3.3ms)[0m   [0mCREATE TABLE `download_items` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `facebook_user_id` int(11), `assignment_id` int(11), `path` varchar(255), `key` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20090422200819')[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW FIELDS FROM `activity_items`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `activity_items`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `activity_items`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `activity_items`[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mSHOW FIELDS FROM `assignments`[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mdescribe `assignments`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `assignments`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW CREATE TABLE `assignments`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW FIELDS FROM `authorships`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mdescribe `authorships`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `authorships`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `authorships`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW FIELDS FROM `comments`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mdescribe `comments`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW KEYS FROM `comments`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `comments`[0m
+  [4;36;1mSQL (69.5ms)[0m   [0;1mSHOW FIELDS FROM `download_items`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mdescribe `download_items`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW KEYS FROM `download_items`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW CREATE TABLE `download_items`[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mSHOW FIELDS FROM `facebook_users`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mdescribe `facebook_users`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `facebook_users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `facebook_users`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `ratings`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `ratings`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW KEYS FROM `ratings`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `ratings`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `sessions`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mdescribe `sessions`[0m
+  [4;36;1mSQL (2.1ms)[0m   [0;1mSHOW KEYS FROM `sessions`[0m
+  [4;35;1mSQL (57.9ms)[0m   [0mSHOW CREATE TABLE `sessions`[0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1mSHOW FIELDS FROM `taggings`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mdescribe `taggings`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW KEYS FROM `taggings`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `taggings`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `tags`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mdescribe `tags`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW KEYS FROM `tags`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW CREATE TABLE `tags`[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mAssignment Columns (4.0ms)[0m   [0;1mSHOW FIELDS FROM `assignments`[0m
+  [4;35;1mAssignment Indexes (0.6ms)[0m   [0mSHOW KEYS FROM `assignments`[0m
+  [4;36;1mAssignment Load (0.6ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 24) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (2.7ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (24)) [0m
+  [4;36;1mAssignment Load (0.7ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 19) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (4.7ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (19)) [0m
+  [4;36;1mAssignment Load (0.6ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 2) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (2.8ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (2)) [0m
+  [4;36;1mAssignment Load (0.7ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 13) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (4.7ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (13)) [0m
+  [4;36;1mAssignment Load (0.6ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 9) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (15.0ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (9)) [0m
+  [4;36;1mAssignment Load (0.6ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 26) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (2.2ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (26)) [0m
+  [4;36;1mAssignment Load (0.6ms)[0m   [0;1mSELECT * FROM `assignments` WHERE (`assignments`.`id` = 25) LIMIT 1[0m
+  [4;35;1mAssignment Delete all (3.2ms)[0m   [0mDELETE FROM `assignments` WHERE (`id` IN (25)) [0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateAssignments (20080928060516)
+Migrating to CreateSessions (20081005201012)
+Migrating to CreateFacebookUsers (20081006013729)
+Migrating to AddAssignmentUserRelationship (20081006014919)
+Migrating to ActsAsTaggableMigration (20081011224905)
+Migrating to ActsAsRateableMigration (20081014054252)
+Migrating to CreateCommentsTable (20081014061953)
+Migrating to AddCommentRelationships (20081014063426)
+Migrating to CreateActivityItems (20081014182137)
+Migrating to AddPrefCommentNotifyToAssignment (20081110211638)
+Migrating to AddPrefCommentNotifyToFacebookUser (20081110214624)
+Migrating to AddAttachmentToAssignment (20090208070430)
+Migrating to AddAffiliationToFacebookUsers (20090302085759)
+Migrating to AddPublishFlagToAssignment (20090303094203)
+Migrating to CreateAuthorships (20090328062157)
+Migrating to AddPropertyFieldsToAssignment (20090414113040)
+Migrating to DownloadCounter (20090421182228)
+Migrating to UpdateDownloadCounter (20090421183037)
+Migrating to CreateDownloadItems (20090422200819)
+Migrating to BuildDb (20110224191451)
+  [4;36;1mSQL (45.4ms)[0m   [0;1mALTER TABLE `facebook_users` ADD `access_level` tinyint DEFAULT 0[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20110224191451')[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `activity_items`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `activity_items`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `activity_items`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `activity_items`[0m
+  [4;35;1mSQL (1.9ms)[0m   [0mSHOW FIELDS FROM `assignments`[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mdescribe `assignments`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `assignments`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW CREATE TABLE `assignments`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `authorships`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `authorships`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `authorships`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `authorships`[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSHOW FIELDS FROM `comments`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `comments`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `comments`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `comments`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `download_items`[0m
+  [4;36;1mSQL (72.5ms)[0m   [0;1mdescribe `download_items`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW KEYS FROM `download_items`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `download_items`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW FIELDS FROM `facebook_users`[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1mdescribe `facebook_users`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `facebook_users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `facebook_users`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `ratings`[0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1mdescribe `ratings`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `ratings`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `ratings`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `sessions`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mdescribe `sessions`[0m
+  [4;35;1mSQL (2.8ms)[0m   [0mSHOW KEYS FROM `sessions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `sessions`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `taggings`[0m
+  [4;36;1mSQL (60.9ms)[0m   [0;1mdescribe `taggings`[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mSHOW KEYS FROM `taggings`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW CREATE TABLE `taggings`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW FIELDS FROM `tags`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `tags`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW KEYS FROM `tags`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW CREATE TABLE `tags`[0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mFacebookUser Load (0.7ms)[0m   [0;1mSELECT * FROM `facebook_users` [0m
+  [4;35;1mFacebookUser Columns (1.4ms)[0m   [0mSHOW FIELDS FROM `facebook_users`[0m
+  [4;36;1mFacebookUser Indexes (0.7ms)[0m   [0;1mSHOW KEYS FROM `facebook_users`[0m
+  [4;35;1mFacebookUser Load (0.2ms)[0m   [0mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 1) [0m
+  [4;36;1mFacebookUser Load (0.6ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 2) [0m
+  [4;35;1mFacebookUser Load (0.2ms)[0m   [0mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 3) [0m
+  [4;36;1mFacebookUser Load (0.5ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 4) [0m
+  [4;35;1mFacebookUser Load (0.5ms)[0m   [0mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 5) [0m
+  [4;36;1mFacebookUser Load (0.5ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 6) [0m
+  [4;35;1mFacebookUser Load (0.5ms)[0m   [0mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 7) [0m
+  [4;36;1mFacebookUser Load (0.5ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 8) [0m
+  [4;35;1mFacebookUser Load (0.2ms)[0m   [0mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 3) [0m
+  [4;36;1mFacebookUser Load (0.2ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 3) [0m
+  [4;35;1mFacebookUser Load (0.2ms)[0m   [0mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 3) [0m
+  [4;36;1mFacebookUser Load (0.2ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 3) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mFacebookUser Update (0.6ms)[0m   [0;1mUPDATE `facebook_users` SET `access_level` = 1, `updated_at` = '2011-02-24 19:36:11' WHERE `id` = 3[0m
+  [4;35;1mSQL (3.2ms)[0m   [0mCOMMIT[0m
+  [4;36;1mFacebookUser Load (0.5ms)[0m   [0;1mSELECT * FROM `facebook_users` WHERE (`facebook_users`.`id` = 3) [0m
+WORKLING: couldn't find a memcache client - you need one for the starling runner. 
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mDownloadItem Load (0.5ms)[0m   [0;1mSELECT * FROM `download_items` [0m
+  [4;35;1mAssignment Load (1.1ms)[0m   [0mSELECT * FROM `assignments` [0m
+  [4;36;1mAssignment Columns (2.0ms)[0m   [0;1mSHOW FIELDS FROM `assignments`[0m
+  [4;35;1mAssignment Indexes (0.6ms)[0m   [0mSHOW KEYS FROM `assignments`[0m

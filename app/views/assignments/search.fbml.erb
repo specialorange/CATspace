@@ -1,0 +1,8 @@
+<div class="boxHeaderFlexible">Search results</div>
+
+<% for assignment in @assignments %>
+<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
+<% end %>
+
+<br />
+<%= link_to 'All Assignments', assignments_url%>
