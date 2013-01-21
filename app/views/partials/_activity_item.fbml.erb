@@ -10,5 +10,9 @@
 		</a> 
 	<% end %>
 		assignment 	
-	<%= link_to activity_item.assignment.title, :controller=>"assignments",:action=>"show",:id => activity_item.assignment.id  %> (<%= link_to "X", "#", :onclick => "deleteActivityItem(#{activity_item.id})" %>)</div>
+	<%= link_to activity_item.assignment.title, :controller=>"assignments",:action=>"show",:id => activity_item.assignment.id  %> 
+<% if activity_item.facebook_user.id == @fb_user.id %>
+(<%= link_to "X", "#", :onclick => "deleteActivityItem(#{activity_item.id})" %>)
+<% end %>
+</div>
 </div>

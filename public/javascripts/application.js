@@ -36,13 +36,15 @@
   
 //For in-place editing
 function flashObj(obj) {    
-            //obj.setStyle('background-color', "#FFFF99");
-			obj.setStyle('border', "1px solid red");
+            obj.setStyle('background-color', "#EEE");
+			obj.setStyle('border', "1px solid #0ACA22");
+			obj.setStyle('padding', "3px");
         }
 
 function unFlashObj(obj) {    
-            //obj.setStyle('background-color', "#FFFFFF");
+            obj.setStyle('background-color', "#FFFFFF");
 			obj.setStyle('border', "none");
+			obj.setStyle('padding', "none");			
         }
   
   //Ajax form submit with a confirmation dialog
@@ -119,6 +121,7 @@ function unFlashObj(obj) {
    }            
    return false;
  }
+
 
 
 

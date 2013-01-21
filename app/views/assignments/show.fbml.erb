@@ -22,9 +22,19 @@ function doAjaxInPlaceCancel(field) {
 	document.getElementById(field+'_editing_section').setStyle("display","none");		
 	document.getElementById(field+'_saving_section').setStyle("display","none");		
   return false;
-}	
-</script>
+}
 
+function confirmFlick(action, URL) {
+		//Confirmation Dialog sends request on Confirm    
+	   dlg = new Dialog(); 
+	   dlg.showChoice("Confirm " + action, "Are you sure you want to "+action+" this item?", "Yes", "No"); 
+	   dlg.onconfirm = function() { 
+			document.setLocation(URL);
+		}
+}
+	
+</script>
+<% if @assignment.facebook_user.id == @fb_user.id %>
 <div class="assignmentHeader">  
 	<div class="assignmentTitle">
 		<div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');">
@@ -41,29 +51,59 @@ function doAjaxInPlaceCancel(field) {
 	<div id="title_saving_section" style="display:none;">
 		<i>Saving...</i>
 	</div>
-	<div style="clear:both;">
-		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => true) %>
+	<div style="clear:both; padding-left:3px">
+		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %>
 	</div>
 </div>
+<% else %>
+<div class="assignmentHeader">  
+	<div class="assignmentTitle">
+		<div id="title_field">
+			<%= @assignment.title %>
+		</div>
+	</div>
+	<div style="clear:both; padding-left:3px">
+		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %>
+	</div>
+</div>
+<% end %>
 
 <p>
   <%= render :partial => "linked_tag_list", :locals => { :list => @assignment.tag_list } %>
 </p>
 
 <div id="contentPanel">
-	<p>
+
+	<div id="assignmentFeatureBox">
+		<div class="leftHalf">
+			<ul class="paramList">
+				<li>Downloads: 0</li>
+				<li>Course: CS6604</li>
+				<li>Est. Experience: </li>
+			</ul>
+		</div>
+		<div class="rightHalf">
+			<ul class="paramList">
+				<li>Rating: <%= @assignment.rating%></li>
+				<li>License: CC Attribute-Only</li>
+				<li>Language: C++</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- <p>
 		<b>Rating: </b>
 		<%= @assignment.rating%> <small>(Rated <%= @assignment.ratings.size%> times.)</small>
 		<%= form_tag :action => "rate", :id => @assignment %>
 		<%= select :rating, :value, {"-"=>"0","*" => "1","**"=>"2","***"=>"3","****"=>"4","*****"=>"5"} %>
 		<%= submit_tag "Rate!"%>
 		</form>
-	</p>
-	<p>
-		<b>Synopsis:</b>
-  		<div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= textilize(@assignment.synopsis) %></div>
+	</p> -->
+	<% if @assignment.facebook_user.id == @fb_user.id %>
+	<p style="clear:both;">
+  		<div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= @assignment.synopsis %></div>
 		<div id="synopsis_editing_section" style="display:none;">
-			<textarea rows="20" cols="56" id="synopsis_editor"><%=@assignment.synopsis%></textarea><br>
+			<textarea rows="20" cols="52" id="synopsis_editor"><%=@assignment.synopsis%></textarea><br>
 			<div class="buttons">
 				<button value="Save" onClick="doAjaxInPlaceSave('synopsis');" class="positive">Save</button>
 				<button value="Cancel" onClick="doAjaxInPlaceCancel('synopsis');" class="negative">Cancel</button>
@@ -73,19 +113,14 @@ function doAjaxInPlaceCancel(field) {
 			Saving...
 		</div>
 	</p>
-<div id="file_list">
-  <b>Files:</b>	
-<% if @assignment.queue_flag %>
-	<ul>
-		<% for file in @assignment.files %>
-			<li><%=file%></li>
-		<% end %>
-	</ul>
-<% else %>
-	No files uploaded.
-<% end %>
-</div>
-<div class="boxHeaderFlexible">Comments</div>
+	<% else %>
+	<p style="clear:both;">
+  		<div id="synopsis_field"><%= @assignment.synopsis %></div>
+	</p>
+	<% end %>
+
+<p style="clear:both;"></p>
+<div class="boxHeaderFlexible" >Comments</div>
 <% for comment in @assignment.comments %>
 <div id="comment">
 <div id="commentUserIcon"><%= fb_profile_pic(comment.facebook_user.uid, options={:size => :thumb}) %></div>
@@ -105,11 +140,30 @@ function doAjaxInPlaceCancel(field) {
 
 <div id="rightPanel">
 	<div class="buttons">
-		<a style="width:93%; clear:none;">Download Assignment</a>
+		<% if @assignment.facebook_user.id == @fb_user.id %>
+					<% if @assignment.published == false %>
+						<a class="positive" href="#" onClick="confirmFlick('publish', '<%=url_for :action => "flick_switch", :id => @assignment.id%>')">Publish Assignment</a>
+					<% else %>
+						<a class="negative" href="#" onClick="confirmFlick('un-publish', '<%=url_for :action => "flick_switch", :id => @assignment.id%>')">Un-publish Assignment</a>
+					<% end %>
+				</form>
+			<br>
+		<% end %>
+		<a>Download Assignment</a>
 	</div>
 
 	<div class="boxHeaderFlexible">Files</div>
-	<div style="height:200px"></div>
+	<div >
+		<% if @assignment.queue_flag %>
+			<ul>
+				<% for file in @assignment.files %>
+					<li><%=file%></li>
+				<% end %>
+			</ul>
+		<% else %>
+			No files uploaded.
+		<% end %>
+	</div>
 
 	<div class="boxHeaderFlexible">Recent activity</div>
 	<%if @activity_items%>
@@ -131,5 +185,5 @@ function doAjaxInPlaceCancel(field) {
 	<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 	<%= link_to 'All Assignments', assignments_path %><br>
 </div>
-<fb:iframe src="<%= iframe_url("assignments/ishow/#{@assignment.id}")%>" border="0" width="645" height="200" name="iFrameShow" scrolling="no" frameborder="0"></fb:iframe>
+<!-- <fb:iframe src="<%= iframe_url("assignments/ishow/#{@assignment.id}")%>" border="0" width="645" height="200" name="iFrameShow" scrolling="no" frameborder="0"></fb:iframe> -->
 

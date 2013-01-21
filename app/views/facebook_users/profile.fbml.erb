@@ -56,12 +56,11 @@ document.getElementById('ajax_button').addEventListener('click',submitAjax);
 	<br>
 	
 	<% if @self%>
-		<div class="greenButton">
-			<%=link_to "Create Assignment", {:controller=>"assignments", :action => "new"}, :class =>"whiteLink"%>
+		<div class="buttons" style="clear:none;">
+			<%=link_to "Create Assignment", {:controller=>"assignments", :action => "new"}, :class =>"positive"%>
+			<br />
+			<%= link_to "Preferences", :action=>"preferences" %>
 		</div>
-		<br />
-		<%= link_to "Preferences", :action=>"preferences" %>
-		<br />
 		<br />
 	<% end %>
 

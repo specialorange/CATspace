@@ -45,8 +45,9 @@ ActionController::Routing::Routes.draw do |map|
   map.profile('/profile/:id', :controller => "facebook_users", :action => "profile")
   map.assignments('assignments',:controller => "assignments", :action => "index")
   map.home('home',:controller => "home", :action => "index")  
-  map.search('search',:controller => "assignments", :action => "search")    
-  
+  map.search('search',:controller => "assignments", :action => "search")
+  map.people('people',:controller => "facebook_users", :action => "profile")    
+  map.my_catspace('me',:controller => "facebook_users", :action => "my")      
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

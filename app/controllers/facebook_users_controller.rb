@@ -1,8 +1,12 @@
 class FacebookUsersController < ApplicationController
   ensure_authenticated_to_facebook
-  
+     
   def setup_facebook_user
     @current_facebook_user  = facebook_session.user
+  end
+  
+  def my
+    render :action => "profile", :id => @fb_user.id
   end
   
   def profile

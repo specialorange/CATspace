@@ -56,7 +56,7 @@ class AssignmentsController < ApplicationController
 
       if @assignment.save
         flash[:notice] = 'Assignment was successfully created.'
-        @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::CreateAssignmentString)
+        # @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::CreateAssignmentString)
         redirect_to(@assignment)
       else
         render :action => "new"
@@ -122,4 +122,29 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     render :layout => 'iframe'
   end  
+  
+  #TODO: Later, when the demo hoopla is over, we need to filter out assignments that have not been published from all listings.
+  def flick_switch
+    @assignment = Assignment.find(params[:id])
+      if @assignment.facebook_user.id = @fb_user.id
+        @assignment.published = !(@assignment.published)
+        if @assignment.save
+          if(@assignment.published)
+            flash[:notice] = 'The Assignment was successfully published.'
+            #TODO: Move from the "created" string to "published" string.
+            @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::CreateAssignmentString)        
+          else
+            flash[:notice] = 'The Assignment was successfully unpublished.'
+          end
+          redirect_to(@assignment)
+        else
+          flash[:alert] = 'An error occured while updating the assignment. Please try again.'
+          redirect_to(@assignment)
+        end
+      else
+        flash[:alert] = 'You are not the author of that assignment.'
+        redirect_to(@assignment)
+      end
+  end
+    
 end
