@@ -1,0 +1,8 @@
+<script language="JavaScript" type="text/javascript"> 
+function deleteActivityItem(id) {
+  url = '<%= url_for(:controller => "activity_items", :action => "destroy", :canvas => false, :only_path => false,
+  request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
+  ajaxDeleteItem( id , url,'activity-'+id); 
+  return false;
+}
+</script>

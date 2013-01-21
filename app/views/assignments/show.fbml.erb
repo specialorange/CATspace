@@ -1,3 +1,4 @@
+<%= render :partial =>"partials/activity_item_ajax_js_include" %>
 <script type="text/javascript" charset="utf-8">
 function doAjaxInPlaceEdit(field) {
 	document.getElementById(field+'_field').setStyle("display","none");
@@ -23,41 +24,55 @@ function doAjaxInPlaceCancel(field) {
   return false;
 }	
 </script>
-<p>
+
 <div class="assignmentHeader">  
-<div class="assignmentTitle"><div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');"><%= @assignment.title %></div></div>
-<div id="title_editing_section" style="display:none;">
-<input type="text" size="<%= @assignment.title.length%>" id="title_editor" value="<%=@assignment.title%>"/> <input type="button" value="Save" 
-onClick="doAjaxInPlaceSave('title');" /> Or <input type="button" value="Cancel" onClick="doAjaxInPlaceCancel('title');"/>
+	<div class="assignmentTitle">
+		<div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');">
+			<%= @assignment.title %>
+		</div>
+	</div>
+	<div id="title_editing_section" style="display:none;">
+		<input type="text" size="60" id="title_editor" value="<%=@assignment.title%>"/> 
+		<div class="buttons">
+			<button value="Save" onClick="doAjaxInPlaceSave('title');" class="positive">Save</button>
+			<button value="Cancel" onClick="doAjaxInPlaceCancel('title');" class="negative">Cancel</button>
+		</div>
+	</div>
+	<div id="title_saving_section" style="display:none;">
+		<i>Saving...</i>
+	</div>
+	<div style="clear:both;">
+		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => true) %>
+	</div>
 </div>
-<div id="title_saving_section" style="display:none;">
-<i>Saving...</i>
-</div>
-  <%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => true) %>
-</div>
-</p>
+
 <p>
   <%= render :partial => "linked_tag_list", :locals => { :list => @assignment.tag_list } %>
 </p>
-<p>
-  <b>Rating: </b>
-  <%= @assignment.rating%> <small>(Rated <%= @assignment.ratings.size%> times.)</small>
-<%= form_tag :action => "rate", :id => @assignment %>
-<%= select :rating, :value, {"-"=>"0","*" => "1","**"=>"2","***"=>"3","****"=>"4","*****"=>"5"} %>
-<%= submit_tag "Rate!"%>
-</form>
-</p>
-<p>
-  <b>Synopsis:</b>
-  <div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= textilize(@assignment.synopsis) %></div>
-<div id="synopsis_editing_section" style="display:none;">
-<textarea rows="20" cols="80" id="synopsis_editor"><%=@assignment.synopsis%></textarea><br><input type="button" value="Save" 
-onClick="doAjaxInPlaceSave('synopsis');" /> Or <input type="button" value="Cancel" onClick="doAjaxInPlaceCancel('synopsis');"/>
-</div>
-<div id="synopsis_saving_section" style="display:none;">
-Saving...
-</div>
-</p>
+
+<div id="contentPanel">
+	<p>
+		<b>Rating: </b>
+		<%= @assignment.rating%> <small>(Rated <%= @assignment.ratings.size%> times.)</small>
+		<%= form_tag :action => "rate", :id => @assignment %>
+		<%= select :rating, :value, {"-"=>"0","*" => "1","**"=>"2","***"=>"3","****"=>"4","*****"=>"5"} %>
+		<%= submit_tag "Rate!"%>
+		</form>
+	</p>
+	<p>
+		<b>Synopsis:</b>
+  		<div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= textilize(@assignment.synopsis) %></div>
+		<div id="synopsis_editing_section" style="display:none;">
+			<textarea rows="20" cols="56" id="synopsis_editor"><%=@assignment.synopsis%></textarea><br>
+			<div class="buttons">
+				<button value="Save" onClick="doAjaxInPlaceSave('synopsis');" class="positive">Save</button>
+				<button value="Cancel" onClick="doAjaxInPlaceCancel('synopsis');" class="negative">Cancel</button>
+			</div>
+		</div>
+		<div id="synopsis_saving_section" style="display:none;">
+			Saving...
+		</div>
+	</p>
 <div id="file_list">
   <b>Files:</b>	
 <% if @assignment.queue_flag %>
@@ -75,7 +90,7 @@ Saving...
 <div id="comment">
 <div id="commentUserIcon"><%= fb_profile_pic(comment.facebook_user.uid, options={:size => :thumb}) %></div>
 <div id="commentText"><%= textilize(comment.body) %>
-	<p><small>By <%= fb_name(comment.facebook_user.uid, options={:linked => true, :useyou => true})%></small></p>
+	<p><small>By <%= fb_name(comment.facebook_user.uid, options={:linked => true, :capitalize => true, :useyou => true})%></small></p>
 	</div>
 </div>
 <% end %>
@@ -85,11 +100,36 @@ Saving...
 	<%= submit_tag "Comment!"%>
 </form>
 </div>
-<hr>
 
+</div> <!-- Content Panel -->
 
-<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
-<%= link_to 'All Assignments', assignments_path %><br>
+<div id="rightPanel">
+	<div class="buttons">
+		<a style="width:93%; clear:none;">Download Assignment</a>
+	</div>
 
+	<div class="boxHeaderFlexible">Files</div>
+	<div style="height:200px"></div>
+
+	<div class="boxHeaderFlexible">Recent activity</div>
+	<%if @activity_items%>
+		<% for activity_item in @activity_items %>
+			<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
+		<% end %>
+	<%else%>
+		There is no recent activity on this assignment.
+	<% end %>
+
+	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%></div>
+	<div style="height:200px"></div>
+	
+	
+	
+</div>
+<div style="clear:both;">
+	<hr>
+	<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
+	<%= link_to 'All Assignments', assignments_path %><br>
+</div>
 <fb:iframe src="<%= iframe_url("assignments/ishow/#{@assignment.id}")%>" border="0" width="645" height="200" name="iFrameShow" scrolling="no" frameborder="0"></fb:iframe>
 

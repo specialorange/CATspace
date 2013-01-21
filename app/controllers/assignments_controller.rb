@@ -22,6 +22,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1.xml
   def show
     @assignment = Assignment.find(params[:id])
+    @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}
   end
 
   # GET /assignments/new

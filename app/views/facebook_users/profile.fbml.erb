@@ -1,3 +1,4 @@
+<%= render :partial =>"partials/activity_item_ajax_js_include" %>
 <script language="JavaScript" type="text/javascript"> 
 
 function submitAssignmentAjax(vars) {
@@ -7,57 +8,69 @@ function submitAssignmentAjax(vars) {
   ajaxCall( vars , url,'assignment_list'); 
   return false;
 }
-
-function deleteActivityItem(id) {
-  url = '<%= url_for(:controller => "activity_items", :action => "destroy", :canvas => false, :only_path => false,
-  request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
-  ajaxDeleteItem( id , url,'activity-'+id); 
-  return false;
-}
-
 // Unobtrusively add sumbit ajax to the form
 document.getElementById('ajax_button').addEventListener('click',submitAjax);
-
 </script>
 <div id="contentPanel">
-<table border="0" cellspacing="5" cellpadding="2">
-	<tr>
-		<td><%= fb_profile_pic(@user.uid, options={:size => :normal}) %></td>
-		<td width="90%" valign="top"><h1><%= fb_name(@user.uid, options={:linked => false, :useyou => false}) %></h1>
-<div id="userProfileInfo">
-	<%= @user.assignments.count %> Assignments on CATspace.
-</div>
-</td>		
+	<table border="0" cellspacing="5" cellpadding="2">
+		<tr>
+			<td><%= fb_profile_pic(@user.uid, options={:size => :normal}) %></td>
+			<td width="90%" valign="top">
+				<h1><%= fb_name(@user.uid, options={:linked => false, :useyou => false}) %></h1>
+				<div id="userProfileInfo">
+					<%= @user.assignments.count %> Assignments on CATspace.
+				</div>
+			</td>		
 		</tr>
-</table>
-<div class="boxHeaderFlexible"><%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Latest Activity</div>
-<% for activity_item in @activity_items %>
-<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
-<% end %>
+	</table>
+	<div class="boxHeaderFlexible">
+		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Latest Activity
+	</div>
+	<% for activity_item in @activity_items %>
+		<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
+	<% end %>
 
-<div class="boxHeaderFlexible"><%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Assignments</div>
-Sort by:
-<%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=date')" %> | 
-<%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=title')" %> | 
-<%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=rating')" %> | 
-<%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=comments')" %>
-<div id="assignment_list">
-<% for assignment in @user.assignments %>
-<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
-<%end%>
-<!-- <%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @user.assignments}, :layout => false %> -->
+	<div class="boxHeaderFlexible">
+		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Assignments
+	</div>
+
+	Sort by:
+	<%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=date')" %> | 
+	<%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=title')" %> | 
+	<%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=rating')" %> | 
+	<%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=comments')" %>
+
+	<div id="assignment_list">
+		<% for assignment in @user.assignments %>
+			<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
+		<%end%>
+		<!-- <%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @user.assignments}, :layout => false %> -->
+	</div>
+
+	<br>
+	
 </div>
 
-<br>
-</div>
 <div id="rightPanel">
-<br>
-<% if @self%>
-<div class="greenButton"><%=link_to "Create Assignment", {:controller=>"assignments", :action => "new"}, :class =>"whiteLink"%></div><br /><%= link_to "Preferences", :action=>"preferences" %><br /><br />
-<% end %>
-<div class="boxHeaderFlexible">  <%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Tag Cloud</div>
-<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
-    <%= link_to tag.name, { :controller=>"assignments", :action => :tag, :id => tag.name }, :class => css_class %>
-<% end %>
+	
+	<br>
+	
+	<% if @self%>
+		<div class="greenButton">
+			<%=link_to "Create Assignment", {:controller=>"assignments", :action => "new"}, :class =>"whiteLink"%>
+		</div>
+		<br />
+		<%= link_to "Preferences", :action=>"preferences" %>
+		<br />
+		<br />
+	<% end %>
+
+	<div class="boxHeaderFlexible">  
+		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Tag Cloud
+	</div>
+
+	<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
+    	<%= link_to tag.name, { :controller=>"assignments", :action => :tag, :id => tag.name }, :class => css_class %>
+	<% end %>
 
 </div>

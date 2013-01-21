@@ -36,11 +36,13 @@
   
 //For in-place editing
 function flashObj(obj) {    
-            obj.setStyle('background-color', "#FFFF99");
+            //obj.setStyle('background-color', "#FFFF99");
+			obj.setStyle('border', "1px solid red");
         }
 
 function unFlashObj(obj) {    
-            obj.setStyle('background-color', "#FFFFFF");
+            //obj.setStyle('background-color', "#FFFFFF");
+			obj.setStyle('border', "none");
         }
   
   //Ajax form submit with a confirmation dialog
@@ -105,8 +107,9 @@ function unFlashObj(obj) {
 		document.getElementById(field+'_editing_section').setStyle("display","none");		
 		document.getElementById(field+'_saving_section').setStyle("display","none");		
 
+		
 		//Animate the updated div.
-		returnToNormal(highlightDiv(field+'_field').checkpoint()).go();
+		//returnToNormal(highlightDiv(field+'_field').checkpoint()).go();
 		 
        }; 
        ajax.post(url, "id="+id+"&name="+field+"&value="+value); 
@@ -140,15 +143,3 @@ function unFlashObj(obj) {
    }            
    return false;
  } 
-
-//Couple of quick methods to set and reset the search field
-function clickClear(thisfield, defaulttext) {
-if (thisfield.value == defaulttext) {
-thisfield.value = "";
-}
-}
-function clickRecall(thisfield, defaulttext) {
-if (thisfield.value == "") {
-thisfield.value = defaulttext;
-}
-}
