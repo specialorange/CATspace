@@ -53,7 +53,7 @@ class AssignmentsController < ApplicationController
   def create
     @assignment = Assignment.new(params[:assignment])
     @assignment.facebook_user_id = @fb_user.id
-
+    @assignment.published = false
       if @assignment.save
         flash[:notice] = 'Assignment was successfully created.'
         # @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::CreateAssignmentString)
