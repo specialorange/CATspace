@@ -23,6 +23,7 @@ class AssignmentsController < ApplicationController
   def show
     @assignment = Assignment.find(params[:id])
     @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}
+    @upload_url = ActionController::Base.asset_host + "/assignments/upload/";
   end
 
   # GET /assignments/new
@@ -113,8 +114,7 @@ class AssignmentsController < ApplicationController
     ZipWorker.asynch_unzip_file(:id => @assignment.id, :source => @assignment.path_to_attachment, :target => @assignment.path_to_folder)
     #TODO: This should not be set like this. It should instead be based on feedback from the background job.
     @assignment.update_attribute(:queue_flag, true)
-    # TODO: Move to a global var. in environment - Please! OR Use the vars that facebooker is using.
-    redirect_to "http://apps.facebook.com/catspace_sa/assignments/#{@assignment.id}"
+    redirect_to "http://apps.facebook.com/"+ENV['FACEBOOKER_RELATIVE_URL_ROOT']+"/assignments/#{@assignment.id}"
         
   end
   

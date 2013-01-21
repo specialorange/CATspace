@@ -19,10 +19,20 @@
 	<%= fb_tab_item("My CatSpace", profile_url(:id => ""), :selected => self_profile_selected?)%>
 <% end %>
 <% if flash[:alert]%>
-<p class="alert"><%= flash[:alert] %></p>
+	<br>
+	<div id="alert" class="alert"><%= flash[:alert] %></div>
+	<script type="text/javascript" charset="utf-8">
+		fadeAway("alert");
+	</script>	
 <% end %>
 <% if flash[:notice] %>
-<p class="notice"><%= flash[:notice] %></p>
+	<br>
+	<div id="notice" class="notice"><%= flash[:notice] %></div>
+	<script type="text/javascript" charset="utf-8">
+		fadeAway("notice");
+	</script>
+	<!-- <a href="#" onClick="fadeAway('notice');">Test Animation</a> -->
+
 <% end %>
 <div id="current_content">
 

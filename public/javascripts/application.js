@@ -8,6 +8,10 @@
   function obscure(animation){
      return animation.to('height', '0px').to('opacity', 0).hide();
   }
+
+  function obscureSlow(animation){
+     return animation.duration(4000).checkpoint().to('opacity', 100).to('opacity', 0).hide();
+  }
   
   function revealDiv(div_id){
     return  reveal(Animation(document.getElementById(div_id)));
@@ -22,7 +26,7 @@
   }
 
   function highlight(animation){
-    return animation.to('background', '#D2D3E3').duration(1000).checkpoint().to('background', '#D2D3E3');
+    return animation.to('background', '#F5EE7E').duration(1000).checkpoint().to('background', '#FAFBCC');
   }
   
   function returnToNormal(animation){
@@ -122,7 +126,10 @@ function unFlashObj(obj) {
    return false;
  }
 
-
+  function fadeAway(id) {
+	obscureSlow(highlightDiv(id).checkpoint()).go();
+	//animation(document.getElementById(id)).duration(2000).checkpoint().to('height', '0px').to('opacity', 0).hide().go();
+  }
 
 
   function ajaxDeleteItem(id, url, div_id){ 

@@ -70,10 +70,6 @@ div.assignmentTitle{
 	font-weight: bold;
 }
 
-div#title_editing_section input[type="text"], input.titleField{
-	font-size: 15px;
-	font-weight: bold;
-}
 
 div#ajax_control{   
     float:right;
@@ -270,14 +266,19 @@ margin-left:0px;
 }
 
 /* INPUT TEXT */
-input {  
+input{  
     border: 1px solid silver;  
     padding: 4px;  
     font-size: 1em;  
     background-color: #F8F8F8;  
 }
 
-input:focus {  
+div#title_editing_section input, input.titleField{
+	font-size: 15px;
+	font-weight: bold;
+}
+
+input:focus{  
     border-color: #000;  
     background-color: #F5EFE6;  
 }
@@ -312,7 +313,7 @@ textarea:focus {
 }
 /* Alerts and notices*/
 
-p.alert {
+.alert {
 	color: #9d0a09;
 	font-weight: bold;
 	background-color: #fcb6bc;
@@ -320,7 +321,7 @@ p.alert {
 	border: 1px solid #f81510;
 }
 
-p.notice {
+.notice {
 	color: #1aa51b;
 	font-weight: bold;
 	font-size: 12px;
