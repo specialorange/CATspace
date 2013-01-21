@@ -39,10 +39,10 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
   
   #default
-  map.root :controller => 'facebook_users', :action => 'my'
+  map.root :controller => 'facebook_users', :action => 'profile'
   
   #aliases
-  map.my('my', :controller => "facebook_users", :action => "my")
+  map.profile('/profile/:id', :controller => "facebook_users", :action => "profile")
   map.assignments('assignments',:controller => "assignments", :action => "index")
   map.home('home',:controller => "home", :action => "index")  
   map.search('search',:controller => "assignments", :action => "search")    

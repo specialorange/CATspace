@@ -22,37 +22,40 @@ document.getElementById('ajax_button').addEventListener('click',submitAjax);
 <div id="contentPanel">
 <table border="0" cellspacing="5" cellpadding="2">
 	<tr>
-		<td><%= fb_profile_pic(@fb_user.uid, options={:size => :normal}) %></td>
-		<td width="90%" valign="top"><h1><%= fb_name(@fb_user.uid, options={:linked => false, :useyou => false}) %></h1></td>		
+		<td><%= fb_profile_pic(@user.uid, options={:size => :normal}) %></td>
+		<td width="90%" valign="top"><h1><%= fb_name(@user.uid, options={:linked => false, :useyou => false}) %></h1>
+<div id="userProfileInfo">
+	<%= @user.assignments.count %> Assignments on CATspace.
+</div>
+</td>		
 		</tr>
 </table>
-<div class="boxHeaderFlexible">Latest Activity</div>
-<ul>
+<div class="boxHeaderFlexible"><%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Latest Activity</div>
 <% for activity_item in @activity_items %>
-  <div id="activity-<%=activity_item.id%>">
-	    <%= fb_name(activity_item.facebook_user.uid, options={:linked => true, :useyou => true}) %> <%= activity_item.sentence%> <%= link_to activity_item.assignment.title, :controller=>"assignments",:action=>"show",:id => activity_item.assignment.id  %> (<%= link_to "X", "#", :onclick => "deleteActivityItem(#{activity_item.id})" %>)
-  </div>
+<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
 <% end %>
-</ul>
-<div class="boxHeaderFlexible">Your Assignments</div>
+
+<div class="boxHeaderFlexible"><%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Assignments</div>
 Sort by:
-<%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@fb_user.id}&sort=date')" %> | 
-<%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@fb_user.id}&sort=title')" %> | 
-<%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@fb_user.id}&sort=rating')" %> | 
-<%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@fb_user.id}&sort=comments')" %>
+<%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=date')" %> | 
+<%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=title')" %> | 
+<%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=rating')" %> | 
+<%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=comments')" %>
 <div id="assignment_list">
-<% for assignment in @fb_user.assignments %>
+<% for assignment in @user.assignments %>
 <%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
 <%end%>
-<!-- <%= render :partial => "ajaxy_list", :locals => {:user => @fb_user, :assignments => @fb_user.assignments}, :layout => false %> -->
+<!-- <%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @user.assignments}, :layout => false %> -->
 </div>
 
 <br>
 </div>
 <div id="rightPanel">
 <br>
+<% if @self%>
 <div class="greenButton"><%=link_to "Create Assignment", {:controller=>"assignments", :action => "new"}, :class =>"whiteLink"%></div><br /><%= link_to "Preferences", :action=>"preferences" %><br /><br />
-<div class="boxHeaderFlexible">Your Tag Cloud</div>
+<% end %>
+<div class="boxHeaderFlexible">  <%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Tag Cloud</div>
 <% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
     <%= link_to tag.name, { :controller=>"assignments", :action => :tag, :id => tag.name }, :class => css_class %>
 <% end %>

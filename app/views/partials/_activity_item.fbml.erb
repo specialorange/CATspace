@@ -1,0 +1,14 @@
+<div id="activity-<%=activity_item.id%>" class="activityItem">
+<div class="activityItemIcon"><%= image_tag activity_icon activity_item%></div><div class="activityItemText">
+<a href="<%=profile_url(:id => activity_item.facebook_user.id)%>">
+	<%= fb_name(activity_item.facebook_user.uid, options={:capitalize => true, :linked => false, :useyou => true}) %>
+</a>
+	<%= activity_item.sentence%> 
+	<% if activity_item.assignment.facebook_user.id != activity_item.facebook_user.id %>
+		<a href="<%=profile_url(:id => activity_item.assignment.facebook_user.id)%>">
+			<%= fb_name(activity_item.assignment.facebook_user.uid, :capitalize => false, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %>
+		</a> 
+	<% end %>
+		assignment 	
+	<%= link_to activity_item.assignment.title, :controller=>"assignments",:action=>"show",:id => activity_item.assignment.id  %> (<%= link_to "X", "#", :onclick => "deleteActivityItem(#{activity_item.id})" %>)</div>
+</div>

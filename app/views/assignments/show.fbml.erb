@@ -24,7 +24,8 @@ function doAjaxInPlaceCancel(field) {
 }	
 </script>
 <p>
-  <div class="assignmentTitle"><div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');"><%= @assignment.title %></div></div>
+<div class="assignmentHeader">  
+<div class="assignmentTitle"><div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');"><%= @assignment.title %></div></div>
 <div id="title_editing_section" style="display:none;">
 <input type="text" size="<%= @assignment.title.length%>" id="title_editor" value="<%=@assignment.title%>"/> <input type="button" value="Save" 
 onClick="doAjaxInPlaceSave('title');" /> Or <input type="button" value="Cancel" onClick="doAjaxInPlaceCancel('title');"/>
@@ -32,12 +33,10 @@ onClick="doAjaxInPlaceSave('title');" /> Or <input type="button" value="Cancel" 
 <div id="title_saving_section" style="display:none;">
 <i>Saving...</i>
 </div>
-
-  <b>Author:</b>
   <%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => true) %>
+</div>
 </p>
 <p>
-  <b>Tags: </b>
   <%= render :partial => "linked_tag_list", :locals => { :list => @assignment.tag_list } %>
 </p>
 <p>
@@ -92,4 +91,5 @@ Saving...
 <%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 <%= link_to 'All Assignments', assignments_path %><br>
 
+<fb:iframe src="<%= iframe_url("assignments/ishow/#{@assignment.id}")%>" border="0" width="645" height="200" name="iFrameShow" scrolling="no" frameborder="0"></fb:iframe>
 

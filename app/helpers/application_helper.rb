@@ -16,14 +16,37 @@ module ApplicationHelper
    params[:controller].to_s == controller_name.to_s and params[:action].to_s == action_name.to_s
   end   
   
+  def self_profile_selected?
+   params[:controller].to_s == "facebook_users" and params[:action].to_s == "profile" and (!params[:id])
+  end
+  
   #Low-def version to highlight a tab only if the controller matches
   def controller_selected?(controller_name)
    params[:controller].to_s == controller_name.to_s
   end   
   
+  def iframe_url(suffix)
+    ActionController::Base.asset_host+"/"+suffix
+  end
 
   def ajax_on?
    session[:ajaxy]
   end
 
+  CreateAssignmentString = "created assignment "
+  UpdateAssignmentString = "updated assignment "
+  CommentAssignmentString = "commented on assignment "
+
+  def activity_icon(item)
+    if item.sentence == ActivityItem::CreateAssignmentString
+      return "activity_icons/create.png"
+    elsif item.sentence == ActivityItem::UpdateAssignmentString
+      return "activity_icons/update.png"
+    elsif item.sentence == ActivityItem::CommentAssignmentString
+      return "activity_icons/comment.png"
+    else
+      return "activity_icons/unknown.png"
+    end
+  end
+  
 end

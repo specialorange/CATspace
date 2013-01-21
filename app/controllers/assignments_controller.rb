@@ -1,4 +1,8 @@
 class AssignmentsController < ApplicationController
+
+  #Declaration for in-place editing plugin
+  in_place_edit_for :assignment, :title
+
   # GET /assignments
   # GET /assignments.xml
   def index
@@ -39,7 +43,7 @@ class AssignmentsController < ApplicationController
   def edit_field
     @assignment = Assignment.find(params[:id])
     if @assignment.update_attribute(params["name"], params["value"])
-      @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => "updated assignment ")        
+      @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::UpdateAssignmentString)        
       render :partial => "ajaxy_updated_param", :locals => {:value => params["value"]}, :layout => false
     else
       render :partial => "ajaxy_updated_param", :locals => {:value => "!!!failed!!!"}, :layout => false    
@@ -54,7 +58,7 @@ class AssignmentsController < ApplicationController
 
       if @assignment.save
         flash[:notice] = 'Assignment was successfully created.'
-        @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => "created assignment ")
+        @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::CreateAssignmentString)
         redirect_to(@assignment)
       else
         render :action => "new"
@@ -67,7 +71,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
       if @assignment.update_attributes(params[:assignment])
         flash[:notice] = 'Assignment was successfully updated.'
-        @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => "updated assignment ")        
+        @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::UpdateAssignmentString)        
         redirect_to(@assignment)
       else
         render :action => "edit"
@@ -79,7 +83,7 @@ class AssignmentsController < ApplicationController
     @assignment.comments.create(:body => params[:comment][:body].to_s, :facebook_user_id => @fb_user.id)
     flash[:notice] = "Successfully created your comment..."
     #Add item to activity stream
-    @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => "commented on assignment ")    
+    @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::CommentAssignmentString)    
     
     #If user has opted for notifications, send email
     if @assignment.facebook_user.pref_comment_notify == true
@@ -115,4 +119,9 @@ class AssignmentsController < ApplicationController
     redirect_to "http://apps.facebook.com/catspace_sa/assignments/#{@assignment.id}"
         
   end
+  
+  def ishow
+    @assignment = Assignment.find(params[:id])
+    render :layout => 'iframe'
+  end  
 end

@@ -1,7 +1,20 @@
+wrapper {
+	font-size: 12px;
+}
+
 a {
 	color: #3B5998;
 }
 
+h1 {
+	font-size: 18px;
+}
+
+#userProfileInfo {
+	margin-top: 5px;
+	font-size: 11px;
+	color: #636363;
+}
 
 div#content{
  padding:10px;
@@ -37,7 +50,7 @@ h2, h3{
 }
 
 div.user_thumb{
-    width:50px;
+     width:50 px;
     float:left;
     padding:2px;
     text-align:center;
@@ -117,7 +130,7 @@ background-color : #FFFF99;
 	margin-bottom: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
-	margin-top: 0px;
+	margin-top: 10px;
 	padding-bottom: 5px;
 	padding-left: 8px;
 	padding-right: 8px;
@@ -128,30 +141,70 @@ background-color : #FFFF99;
 
 #headerSearchForm {
 	float:right;
-	clear:both;
+	clear:none;
 }
 
 #header {
 	clear:both;
+	/* TODO: This is not working */
+/*	background: url(/images/header_bg.png) repeat-x 0 bottom;
+	border: 1px solid #cdcdcd;*/	
+	padding: 4px;
+/*	background-color: rgb(236, 239, 245);	*/
+}
+
+#headerImage {
+	vertical-align: middle;
+	clear: none;
 }
 
 #headerWelcome {
 	align:left;
 }
 
+.activityItem {
+	clear: both;
+	margin-top: 3px;
+	margin-bottom: 5px;
+	margin-left: 8px;
+	font-size: 12px;
+}
+
+.activityItemIcon {
+	float: left;
+	clear: none;
+}
+
+.activityItemText {
+	clear: none;
+	margin-left: 18px;
+}
+
 
 .tag {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
-	color: #FFFFFF;
-	background-color: #6A84B5;
-	margin: 2px;
+	color: #727272;
+	background-color: #D2DDE6;
+	margin-right: 4px;
+	margin-top: 2px;
+	margin-bottom: 2px;
 	padding-left:4px;
 	padding-right:4px;
 	padding-top:2px;
 	padding-bottom:2px;
+	border: 1px solid #DFDFDF;
 	width:auto;
 }
+
+.tag:hover a, .tag a:hover {
+	text-decoration: none;
+	color: #FFFFFF;	
+}
+.tag:hover{
+	background-color: #88B2D5;
+}
+
 a.whiteLink {
 	color: #FFFFFF;
 }
@@ -164,6 +217,7 @@ a.whiteLink {
 }
 
 .assignmentTitle {
+	margin-bottom: 1px;
 }
 
 .assignmentAuthor {
@@ -209,4 +263,43 @@ margin-left:0px;
 	padding-right: 6px;
 	padding-bottom: 6px;
 	padding-left: 6px;
+}
+
+/* INPUT TEXT */
+input {  
+    border: 1px solid silver;  
+    padding: 4px;  
+    font-size: 1em;  
+    background-color: #F8F8F8;  
+}
+
+input:focus {  
+    border-color: #000;  
+    background-color: #F5EFE6;  
+}
+
+/* Alerts and notices*/
+
+p.alert {
+	color: #9d0a09;
+	font-weight: bold;
+	background-color: #fcb6bc;
+	padding: 10px;
+	border: 1px solid #f81510;
+}
+
+p.notice {
+	color: #1aa51b;
+	font-weight: bold;
+	font-size: 12px;
+	background-color: #FDFAE1;
+	padding: 10px;	
+	border: 1px solid #1aa51b;
+}
+
+.assignmentHeader {
+	background-color: #eee;
+	border:	1px solid  #ACACAC;
+	border-width: 1px;
+	padding: 8px;
 }

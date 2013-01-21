@@ -140,3 +140,15 @@ function unFlashObj(obj) {
    }            
    return false;
  } 
+
+//Couple of quick methods to set and reset the search field
+function clickClear(thisfield, defaulttext) {
+if (thisfield.value == defaulttext) {
+thisfield.value = "";
+}
+}
+function clickRecall(thisfield, defaulttext) {
+if (thisfield.value == "") {
+thisfield.value = defaulttext;
+}
+}

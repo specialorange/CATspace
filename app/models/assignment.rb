@@ -1,3 +1,4 @@
+# require '../utility/java_props'
 require_dependency "search"
 
 class Assignment < ActiveRecord::Base

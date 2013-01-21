@@ -5,12 +5,20 @@ class FacebookUsersController < ApplicationController
     @current_facebook_user  = facebook_session.user
   end
   
-  def my
-    # @user = FacebookUser.find(:first, :conditions =>"uid = #{@facebook_session.user.id}")
-    @tags = @fb_user.assignments.tag_counts
-    @activity_items = @fb_user.activity_items.sort{|a,b| b.created_at <=> a.created_at}
-    #@user_assignments = Assignments.
-  end
+  def profile
+    if(params[:id])
+      @user = FacebookUser.find(params[:id])
+    else
+      @user = @fb_user
+    end
+    @tags = @user.assignments.tag_counts
+    @activity_items = @user.activity_items.sort{|a,b| b.created_at <=> a.created_at}
+    if(@user.id == @fb_user.id)
+      @self = true
+    else
+      @self = false
+    end
+  end  
   
   def list_assignments
     user = FacebookUser.find(params[:user])
