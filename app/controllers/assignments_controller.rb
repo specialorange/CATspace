@@ -32,6 +32,8 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1/edit
   def edit
     @assignment = Assignment.find(params[:id])
+    #TODO: Make this more dynamic. Specifically, the suffix should be dynamically generated.
+    @upload_url = ActionController::Base.asset_host + "/assignments/upload/";
   end
 
   def edit_field
@@ -100,5 +102,17 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     @assignment.destroy
     redirect_to(assignments_url)
+  end
+  
+  def upload
+    @assignment = Assignment.find(params[:id])
+    logger.debug "[DEBUG] Got request to upload. ID is " + params[:id] + " filename is " + params[:uploaded_file].original_filename
+    @assignment.attach_file(params[:uploaded_file])
+    ZipWorker.asynch_unzip_file(:id => @assignment.id, :source => @assignment.path_to_attachment, :target => @assignment.path_to_folder)
+    #TODO: This should not be set like this. It should instead be based on feedback from the background job.
+    @assignment.update_attribute(:queue_flag, true)
+    # TODO: Move to a global var. in environment - Please! OR Use the vars that facebooker is using.
+    redirect_to "http://apps.facebook.com/catspace_sa/assignments/#{@assignment.id}"
+        
   end
 end

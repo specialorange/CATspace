@@ -59,6 +59,18 @@ onClick="doAjaxInPlaceSave('synopsis');" /> Or <input type="button" value="Cance
 Saving...
 </div>
 </p>
+<div id="file_list">
+  <b>Files:</b>	
+<% if @assignment.queue_flag %>
+	<ul>
+		<% for file in @assignment.files %>
+			<li><%=file%></li>
+		<% end %>
+	</ul>
+<% else %>
+	No files uploaded.
+<% end %>
+</div>
 <div class="boxHeaderFlexible">Comments</div>
 <% for comment in @assignment.comments %>
 <div id="comment">

@@ -19,6 +19,11 @@
     <%= f.submit "Update" %>
   </p>
 <% end %>
+<%= form_tag(@upload_url, :multipart => true)%>
+<input type="file" id="uploaded_file" name="uploaded_file" />
+<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
+<%= submit_tag "Upload" %>
+</form>
 
 <%= link_to 'Show', @assignment %> |
 <%= link_to 'Back', assignments_path %>

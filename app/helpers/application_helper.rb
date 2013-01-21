@@ -22,10 +22,6 @@ module ApplicationHelper
   end   
   
 
-  def user_thumb(uid)
-   render :partial => "/footprints/user", :locals => {:uid => uid}
-  end
-  
   def ajax_on?
    session[:ajaxy]
   end
