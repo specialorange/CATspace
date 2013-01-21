@@ -1,8 +1,5 @@
 class AssignmentsController < ApplicationController
 
-  #Declaration for in-place editing plugin
-  in_place_edit_for :assignment, :title
-
   # GET /assignments
   # GET /assignments.xml
   def index
