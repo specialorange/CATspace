@@ -12,3 +12,9 @@ set :deploy_via, :copy
 
 #Setting which user runs the mongrel instances
 set :runner, deploy
+
+task :after_update_code do
+  %w{database.yml environment.rb facebooker.yml}.each do |config|
+    run "ln -nfs #{shared_path}/config/#{config} #{release_path}/config/#{config}"
+  end
+end

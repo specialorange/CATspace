@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081014182137) do
+ActiveRecord::Schema.define(:version => 20081110214624) do
 
   create_table "activity_items", :force => true do |t|
     t.integer  "facebook_user_id", :null => false
@@ -25,10 +25,9 @@ ActiveRecord::Schema.define(:version => 20081014182137) do
     t.integer  "rating"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "facebook_user_id", :null => false
+    t.integer  "facebook_user_id",                       :null => false
+    t.boolean  "pref_comment_notify", :default => false
   end
-
-  add_index "assignments", ["facebook_user_id"], :name => "facebook_user_id"
 
   create_table "comments", :force => true do |t|
     t.text     "body"
@@ -39,12 +38,13 @@ ActiveRecord::Schema.define(:version => 20081014182137) do
   end
 
   create_table "facebook_users", :force => true do |t|
-    t.integer  "uid",             :limit => 8, :null => false
+    t.integer  "uid",                 :limit => 8,                    :null => false
     t.string   "session_key"
     t.string   "session_expires"
     t.datetime "last_access"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pref_comment_notify",              :default => false
   end
 
   add_index "facebook_users", ["uid"], :name => "index_facebook_users_on_uid", :unique => true
@@ -82,7 +82,5 @@ ActiveRecord::Schema.define(:version => 20081014182137) do
   create_table "tags", :force => true do |t|
     t.string "name"
   end
-
-  add_foreign_key "assignments", ["facebook_user_id"], "facebook_users", ["id"], :name => "assignments_ibfk_1"
 
 end
