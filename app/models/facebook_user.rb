@@ -3,8 +3,8 @@ require 'forwardable'
 class FacebookUser < ActiveRecord::Base
  
   has_many :assignments , :foreign_key => "facebook_user_id"
-  has_many :comments
-  has_many :activity_items
+  has_many :comments, :dependent => :destroy
+  has_many :activity_items, :dependent => :destroy
   
   acts_as_taggable
   

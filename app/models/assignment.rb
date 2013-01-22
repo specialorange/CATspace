@@ -13,9 +13,9 @@ class Assignment < ActiveRecord::Base
   @@per_page = 5
      
   belongs_to :facebook_user, :foreign_key => :facebook_user_id, :class_name => "FacebookUser"
-  has_many :comments
-  has_many :activity_items 
-  has_many :authorships 
+  has_many :comments, :dependent => :destroy
+  has_many :activity_items, :dependent => :destroy
+  has_many :authorships, :dependent => :destroy
 
   validates_presence_of :title, :on => :create, :message => "can't be blank"
   
