@@ -1,5 +1,5 @@
 <div id="activity-<%=activity_item.id%>" class="activityItem">
-<div class="activityItemIcon"><%= image_tag activity_icon activity_item%></div><div class="activityItemText">
+<div class="activityItemIcon"><%= image_tag (activity_icon activity_item)%></div><div class="activityItemText">
 <a href="<%=profile_url(:id => activity_item.facebook_user.id)%>">
 	<%= fb_name(activity_item.facebook_user.uid, options={:capitalize => true, :linked => false, :useyou => true}) %>
 </a>

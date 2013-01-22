@@ -4,10 +4,20 @@
 
 <% if !@authors.blank? %>
 	<ul>
-	<li><%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %> </li>
+	<li>
+		<a href="<%=url_for(:controller=>"facebook_users", :action=>"profile", :id=>@assignment.facebook_user.id)%>"><%= fb_name(@assignment.facebook_user.uid, options={:linked => false, :useyou => false}) %></a> 
+	
+	</li>
+	
 	<% for author in @authors %>
-		<li> 
-			<%= fb_name(author.facebook_user_uid, :firstnameonly => false, :useyou => false, :capitalize => true) %> 
+		<li>
+			<% if author.facebook_user %>
+
+			<a href="<%=url_for(:controller=>"facebook_users", :action=>"profile", :id=> FacebookUser.find(:first, :conditions => {:uid => author.facebook_user_uid }))%>"><%= fb_name(author.facebook_user_uid, options={:linked => false, :useyou => false}) %></a> 
+			<%else%>
+					<%= fb_name(author.facebook_user_uid, options={:linked => true, :useyou => false})%>
+			<%end%>			
+			
 			(<%= link_to "Remove", remove_author_url(:id => @assignment.id, :uid => author.facebook_user_uid)%>)
 		</li>
 	<% end %>

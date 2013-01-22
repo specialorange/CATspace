@@ -1,25 +1,4 @@
-<div id="sort_by_buttons">
-	<p align="right">
-		Sort by:
-		<% if sort == 'recoms' %>
-			<span class="grayButtonPressed"><%= link_to_remote "Recommended for You", "", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=recoms')" %></span>
-		<% else %>
-			<span class="grayButton"><%= link_to_remote "Recommended for You", "", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=recoms')" %></span>
-		<% end %>
 
-		<% if sort == 'rated' %>
-			<span class="grayButtonPressed"><%= link_to_remote "Top Rated", "", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=rated')" %></span>
-		<% else %>
-			<span class="grayButton"><%= link_to_remote "Top Rated", "", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=rated')" %></span>
-		<% end %>
-
-		<% if sort == 'downloads' %>
-			<span class="grayButtonPressed"><%= link_to_remote "Top Downloads", "", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=downloads')" %></span>
-		<% else %>
-			<span class="grayButton"><%= link_to_remote "Top Downloads", "", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=downloads')" %></span>
-		<% end %>
-	</p>
-</div>
 
 <% for assignment in assignments %>
 	<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>

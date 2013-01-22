@@ -22,7 +22,6 @@ function doAjaxInPlaceSave(field) {
 function doTagSave(field) {
 	document.getElementById(field+'_saving_section').setStyle("display","block");		
 	id = <%=@assignment.id%>;
-	console.info('ID = '+id);
 	value = document.getElementById(field+'_editor').getValue();
 	url = '<%= url_for(:action => "edit_field", :canvas => false, :only_path => false,
   request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
@@ -34,7 +33,6 @@ function doTagSave(field) {
 function doTagCancel(field) {
 	document.getElementById(field+'_saving_section').setStyle("display","block");		
 	id = <%=@assignment.id%>;
-	console.info('ID = '+id);
 	value = document.getElementById(field+'_editor').getValue();
 	url = '<%= url_for(:action => "display_editable_tag_list", :canvas => false, :only_path => false,
   request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
@@ -73,13 +71,95 @@ function requestTagUpdate(vars) {
 function submit_rating(rating, assignment_id, div_id) {
   url = '<%= url_for(:action => "submit_rating", :canvas => false, :only_path => false,   request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
   var vars = 'rating='+rating+"&"+"assignment_id="+assignment_id;
-  console.info(vars);
-  console.info(url);
   ajaxCall(vars, url,div_id); 
   return false;
 }
 
 </script>
+<style type="text/css">
+/* TODO: MOVE THIS CSS TO THE PUBLIC STYLESHEETS, BUT YOU HAVE TO CHANGE THE 2 REFERENCES TO THE .GIF FILE
+/* THIS IS FOR STAR RATINGS from*/
+/* star rating code - use lists because its more semantic */
+/* No javascript required */
+/* all the stars are contained in one matrix to solve rollover problems with delay */
+/* the background position is just shifted to reveal the correct image. */
+/* the images are 16px by 16px and the background position will be shifted in negative 16px increments */
+/*  key:  B=Blank : O=Orange : G = Green * /
+/*..... The Matrix ....... */
+/* colours ....Background position */
+/* B B B B B - (0 0)*/
+/* G B B B B - (0 -16px)*/
+/* G G B B B - (0 -32px)*/
+/* G G G B B - (0 -48px)*/
+/* G G G G B - (0 -64px)*/
+/* G G G G G - (0 -80px)*/
+/* O B B B B - (0 -96px)*/
+/* O O B B B - (0 -112px)*/
+/* O O O B B - (0 -128px)*/
+/* O O O O B - (0 -144px)*/
+/* O O O O O - (0 -160px)*/
+
+
+/* the default rating is placed as a background image in the ul */
+/* use the background position according to the table above to display the required images*/
+.rating {
+    width:80px;
+    height:16px;
+    margin:0 0 0 0;
+    padding:0;
+    list-style:none;
+    /* clear:both; */
+    position:relative;
+	background: url('<%= request.protocol + request.host_with_port + "//images/activity_icons/star-matrix1.gif"%>') no-repeat 0 0;
+	/* background: url('/images/activity_icons/star-matrix1.gif') no-repeat 0 0; */
+}
+/* add these classes to the ul to effect the change to the correct number of stars */
+.nostar {background-position:0 0}
+.onestar {background-position:0 -16px}
+.twostar {background-position:0 -32px}
+.threestar {background-position:0 -48px}
+.fourstar {background-position:0 -64px}
+.fivestar {background-position:0 -80px}
+ul.rating li {
+    cursor: pointer;
+ /*ie5 mac doesn't like it if the list is floated\*/
+    float:left;
+    /* end hide*/
+    text-indent:-999em;
+}
+ul.rating li a {
+    position:absolute;
+    left:0;
+    top:0;
+    width:16px;
+    height:16px;
+    text-decoration:none;
+    z-index: 200;
+}
+ul.rating li.one a {left:0}
+ul.rating li.two a {left:16px;}
+ul.rating li.three a {left:32px;}
+ul.rating li.four a {left:48px;}
+ul.rating li.five a {left:64px;}
+ul.rating li a:hover {
+    z-index:2;
+    width:80px;
+    height:16px;
+    overflow:hidden;
+    left:0;
+	background: url('<%= request.protocol + request.host_with_port + "//images/activity_icons/star-matrix1.gif"%>') no-repeat 0 0;
+	/* background: url('/images/activity_icons/star-matrix1.gif') no-repeat 0 0; */
+	
+
+}
+ul.rating li.one a:hover {background-position:0 -96px;}
+ul.rating li.two a:hover {background-position:0 -112px;}
+ul.rating li.three a:hover {background-position:0 -128px}
+ul.rating li.four a:hover {background-position:0 -144px}
+ul.rating li.five a:hover {background-position:0 -160px}
+ 
+/* end rating code */
+</style>
 
 <% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 <div class="assignmentHeader">  
@@ -98,8 +178,9 @@ function submit_rating(rating, assignment_id, div_id) {
 	<div id="title_saving_section" style="display:none;">
 		<i>Saving...</i>
 	</div>
-	<div style="clear:both; padding-left:3px">
-		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %> 
+	<div id="authors_area">
+		<a href="<%=url_for(:controller=>"facebook_users", :action=>"profile", :id=>@assignment.facebook_user.id)%>"><%= fb_name(@assignment.facebook_user.uid, options={:linked => false, :useyou => false}) %></a> 
+	
 		<%= render :partial =>"partials/author_list", :locals => {:assignment => @assignment} %>
 		<% if @assignment.facebook_user.id == @fb_user.id %>
 			(<%= link_to "edit authors", authors_url(:id=> @assignment.id) %>)
@@ -113,8 +194,8 @@ function submit_rating(rating, assignment_id, div_id) {
 			<%= @assignment.title %>
 		</div>
 	</div>
-	<div style="clear:both; padding-left:3px">
-		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %>
+	<div id="authors_area">
+			<a href="<%=url_for(:controller=>"facebook_users", :action=>"profile", :id=>@assignment.facebook_user.id)%>"><%= fb_name(@assignment.facebook_user.uid, options={:linked => false, :useyou => false}) %></a> 
 	</div>
 </div>
 <% end %>
@@ -122,7 +203,6 @@ function submit_rating(rating, assignment_id, div_id) {
 
 
 <div id="contentPanel">
-	
 	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 
 	<div id="tags_field">
@@ -135,14 +215,15 @@ function submit_rating(rating, assignment_id, div_id) {
 	<div id="assignmentFeatureBox">
 		<div class="leftHalf">
 			<ul class="paramList">
-				<li>Downloads: 0</li>
+				<li>Downloads: <%= @assignment.stat_downloads%></li>
 				<li>Course: <%=truncate(strip_tags(@assignment.prop_course), 30, "...") %></li>
 				<li>Est. Experience: <%=truncate(strip_tags(@assignment.prop_estimated_experience), 30, "...") %></li>
 			</ul>
 		</div>
 		<div class="rightHalf">
 			<ul class="paramList">
-				<li>Rating: <%= @assignment.rating%></li>
+				<li> <span id="five_star_rating"> <%= render :partial => "five_star_rating", :locals => { :assignment_id => @assignment.id }%> </span>
+				</li>
 				<li>License: 
 				<% if @assignment.prop_license_url%>	
 					<a href= "<%=@assignment.prop_license_url%>"><%=truncate(strip_tags(@assignment.prop_license), 30, "...") %></a></li>
@@ -154,11 +235,6 @@ function submit_rating(rating, assignment_id, div_id) {
 		</div>
 	</div>
 		
-	<div id="five_star_rating">
-	
-	<%= render :partial => "five_star_rating", :locals => { :assignment_id => @assignment.id }%>
-	
-	</div>
 	
 	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 	<p style="clear:both;">
@@ -192,7 +268,7 @@ function submit_rating(rating, assignment_id, div_id) {
 <% end %>
 <div id="commentForm">
 <%= form_tag :action => "comment" , :id => @assignment%>
-	<%= text_area "comment", "body" %> <br>
+	<%= text_area "comment", "body", :class => "comment_text_area" %> <br>
 	<%= submit_tag "Comment!"%>
 </form>
 </div>
@@ -205,13 +281,13 @@ function submit_rating(rating, assignment_id, div_id) {
 					<% if @assignment.published == false %>
 						<a class="positive" href="#" onClick="confirmFlick('publish', '<%=url_for :action => "flick_switch", :id => @assignment.id%>')">Publish Assignment</a>
 					<% else %>
-						<a class="negative" href="#" onClick="confirmFlick('un-publish', '<%=url_for :action => "flick_switch", :id => @assignment.id%>')">Un-publish Assignment</a>
+						<a class="negative" href="#" onClick="confirmFlick('un-publish', '<%=url_for :action => "flick_switch", :id => @assignment.id%>')">Unpublish Assignment</a>
 					<% end %>
 				</form>
 			<br>
 		<% end %>
 		<% if @assignment.queue_flag and @assignment.published %>
-			<%= link_to "Download Assignment", @download_url+@assignment.id.to_s%>
+			<%= link_to "Download Assignment", url_for(:controller => "assignments", :action => "download_item", :id => @assignment.id, :filepath => "/")%>
 		<% end %>
 	</div>
 	<p> </p>
@@ -222,7 +298,11 @@ function submit_rating(rating, assignment_id, div_id) {
 				<% for file in @assignment.files %>
 					<%if file.include?"." %>
 						<li id="fileList_<%=file%>">
-						<%=file%> 
+						<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
+							<%=link_to file, edit_file_path(:id => @assignment.id, :path => file)%>
+						<% else %>
+							<%=link_to file, read_file_path(:id => @assignment.id, :path => file)%>
+						<% end %>
 						<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 							(<%= link_to "X", "#", :onclick => "deleteAssignmentFile(#{@assignment.id}, '#{file})'" %>)
 						<% end %>
@@ -257,7 +337,12 @@ function submit_rating(rating, assignment_id, div_id) {
 		There is no recent activity on this assignment.
 	<% end %>
 	<p> </p>
-	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%></div>
+	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%>
+	<% @more_assignments_by_author.each { |assignment_by_author| 	%>
+		<div class="assignmentItem"><%= link_to assignment_by_author.title, :action => "show", :id => assignment_by_author.id %></div>
+	<% } %>
+
+	</div>
 	<div style="height:200px"></div>
 	
 	
@@ -268,5 +353,4 @@ function submit_rating(rating, assignment_id, div_id) {
 	<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
 	<%= link_to 'All Assignments', assignments_path %><br>
 </div>
-<!-- <fb:iframe src="<%= iframe_url("assignments/ishow/#{@assignment.id}")%>" border="0" width="645" height="200" name="iFrameShow" scrolling="no" frameborder="0"></fb:iframe> -->
 

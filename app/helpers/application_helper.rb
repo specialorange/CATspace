@@ -41,18 +41,16 @@ module ApplicationHelper
   def canvas(suffix)
     "http://apps.facebook.com/" + ENV['FACEBOOKER_RELATIVE_URL_ROOT'] + suffix
   end
-  
-  CreateAssignmentString = "created assignment "
-  UpdateAssignmentString = "updated assignment "
-  CommentAssignmentString = "commented on assignment "
 
   def activity_icon(item)
-    if item.sentence == ActivityItem::CreateAssignmentString
+    if item.sentence == ActivityItem::PublishAssignmentString
       return "activity_icons/create.png"
     elsif item.sentence == ActivityItem::UpdateAssignmentString
       return "activity_icons/update.png"
     elsif item.sentence == ActivityItem::CommentAssignmentString
       return "activity_icons/comment.png"
+    elsif item.sentence == ActivityItem::TagAssignmentString 
+      return "activity_icons/tag2.gif"
     else
       return "activity_icons/unknown.png"
     end

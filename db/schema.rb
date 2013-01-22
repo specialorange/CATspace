@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090414113040) do
+ActiveRecord::Schema.define(:version => 20090422200819) do
 
   create_table "activity_items", :force => true do |t|
     t.integer  "facebook_user_id", :null => false
@@ -25,11 +25,11 @@ ActiveRecord::Schema.define(:version => 20090414113040) do
     t.integer  "rating"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "facebook_user_id",                             :null => false
-    t.boolean  "pref_comment_notify",       :default => false
+    t.integer  "facebook_user_id",                                          :null => false
+    t.boolean  "pref_comment_notify",                    :default => false
     t.string   "attachment_name"
-    t.boolean  "queue_flag",                :default => false
-    t.boolean  "published",                 :default => false
+    t.boolean  "queue_flag",                             :default => false
+    t.boolean  "published",                              :default => false
     t.string   "prop_language"
     t.string   "prop_language_version"
     t.string   "prop_license"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20090414113040) do
     t.string   "prop_estimated_time"
     t.string   "prop_estimated_size"
     t.string   "prop_copyright"
+    t.integer  "stat_downloads",            :limit => 8, :default => 0
   end
 
   create_table "authorships", :force => true do |t|
@@ -56,6 +57,15 @@ ActiveRecord::Schema.define(:version => 20090414113040) do
     t.datetime "updated_at"
     t.integer  "facebook_user_id", :null => false
     t.integer  "assignment_id",    :null => false
+  end
+
+  create_table "download_items", :force => true do |t|
+    t.integer  "facebook_user_id"
+    t.integer  "assignment_id"
+    t.string   "path"
+    t.string   "key"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "facebook_users", :force => true do |t|

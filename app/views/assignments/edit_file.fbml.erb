@@ -1,0 +1,14 @@
+<div class="assignmentTitle">
+		<%= link_to @assignment.title, @assignment %>
+	</div>
+</div>
+<br>
+<h2>Editing file <code><%=params[:path]%></code></h2>
+<%= form_tag :action => "save_file" , :id => @assignment.id%>
+	<textarea id="content" name="content" class="file_text_area" rows="40" cols="98"><%=@file_content%></textarea>
+	<%= hidden_field_tag 'path', params[:path]%>
+	<div class="buttons">
+		<button type="submit" class="positive">Save and return to assignment</button>
+		<a href="<%=url_for(@assignment)%>" class="negative">Cancel</a>
+	</div>
+</form>

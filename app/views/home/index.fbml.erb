@@ -10,7 +10,7 @@ function submitAssignmentAjax(vars) {
   return false;
 }
 // Unobtrusively add sumbit ajax to the form
-document.getElementById('ajax_button').addEventListener('click',submitAjax);
+// document.getElementById('ajax_button').addEventListener('click',submitAjax);
 </script>
 
 <div id="contentPanel">
@@ -19,16 +19,15 @@ document.getElementById('ajax_button').addEventListener('click',submitAjax);
 		<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
 	<% end %>
 	<br>
-	<br>
-	<br>
-	<br>
+	<div class="boxHeaderFlexible">Recommended for You</div>
 	<div id="assignment_list">
 		<%= render :partial => "ajaxy_list", :locals => {:user => @fb_user, :assignments => @recommended_assignments, :sort => 'recoms'}, :layout => false %>
+	</div>
 	</div>
 </div>
 <div id="rightPanel">
 	<div class="boxHeaderFlexible">What is CATspace?</div>
-	CatSpace lets you share assignments with other CS instructors to get feedback and help you improve. Click on the following video for a quick demo: (Video coming soon!)
+	CATspace lets you share assignments with other CS instructors to get feedback and help you improve. Click on the following video for a quick demo: (Video coming soon!)
 	<p> </p>
 	<div class="boxHeaderFlexible">Tags of Interest</div>
 	<% tag_cloud @assignmentTags, %w(css1 css2 css3 css4) do |tag, css_class| %>

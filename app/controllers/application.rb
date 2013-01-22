@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery  :secret => 'a7e3c55449bffbd552d41e59bd3d53cc'
-  ensure_application_is_installed_by_facebook_user
-  before_filter :setup_db_facebook_user
+  ensure_application_is_installed_by_facebook_user :except => [:download]
+  before_filter :setup_db_facebook_user , :except => [:download]
   # after_filter :publish_story_to_user    
 
   # BEGIN setup_db_facebook_user

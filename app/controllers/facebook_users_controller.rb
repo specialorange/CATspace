@@ -16,11 +16,15 @@ class FacebookUsersController < ApplicationController
       @user = @fb_user
     end
     @tags = @user.assignments.tag_counts
-    @activity_items = @user.activity_items.sort{|a,b| b.created_at <=> a.created_at}
+    @activity_items = @user.activity_items.sort{|a,b| b.created_at <=> a.created_at}.first(5)
+    @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => @user.id },:order => 'created_at DESC'
+    
     if(@user.id == @fb_user.id)
       @self = true
+      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => @user.id },:order => 'created_at DESC'
     else
       @self = false
+      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => @user.id, :published => true },:order => 'created_at DESC'
     end
   end  
   
@@ -37,28 +41,37 @@ class FacebookUsersController < ApplicationController
       @self = false
     end
 
-    @friendUsers = @user.friends_with_this_app
-    
     @allUsers = FacebookUser.all
+    @catspaceUsers = []
+    @facebookerUsers = @user.friends_with_this_app
+    # TODO: Low priority - make more efficient
+    @facebookerUsers.each { |facebooker_user| 
+     @catspaceUsers << FacebookUser.find(:first, :conditions => { :uid => facebooker_user.id })
+    }
+    
   end
   
   def list_assignments
     user = FacebookUser.find(params[:user])
     sort = params[:sort]
     if sort == 'title'
-      sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'title ASC'
+      #sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
     elsif sort == 'date'
-      sorted_assignments = user.assignments.sort {|a,b| b.created_at <=> a.created_at}
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'created_at DESC'
+      #sorted_assignments = assignments.sort {|a,b| b.created_at <=> a.created_at}
     elsif sort == 'rating'
-      sorted_assignments = user.assignments.sort {|a,b| a.rating <=> b.rating}
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'rating DESC'
+      #sorted_assignments = user.assignments.sort {|a,b| b.rating <=> a.rating}.first(5)
     elsif sort == 'comments'
+      # TODO: it would be nice to have a stat_comments to be able to check totals for pagination
       sorted_assignments = user.assignments.sort {|a,b| b.comments.length <=> a.comments.length}
     else
-      sorted_assignments = user.assignments
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'created_at DESC'
+      #sorted_assignments = user.assignments.first(5)  
     end
     # user = facebook_session.user
     render :partial => "ajaxy_list", :locals => {:user => user, :assignments => sorted_assignments, :sort => sort}, :layout => false
-    #render :partial => "ajaxy_list", :layout => false    
   end  
   
   def preferences

@@ -1,0 +1,15 @@
+<div class="assignmentTitle">
+		<%= link_to @assignment.title, @assignment %>
+	</div>
+</div>
+<br>
+<h2>Reading file <code><%=params[:path]%></code></h2>
+<div class="fileContent">	
+<pre>
+<%=h @file_content%>
+</pre>
+</div>
+<div class="buttons">
+	<a href="<%=url_for(@assignment)%>">Return to assignment</a>
+</div>
+

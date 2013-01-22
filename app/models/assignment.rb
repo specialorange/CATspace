@@ -88,6 +88,16 @@ class Assignment < ActiveRecord::Base
     end
   end
   
+  def read_file(path)
+    file = File.new(File.join(self.path_to_folder, path))
+    file.read
+  end
+    
+  def write_file(path, content)
+    File.open(File.join(self.path_to_folder, path), 'w') {|f| f.write(content) }
+  end
+
+
   def files(relative = true)
     file_filter = File.join(path_to_folder,"**","*")
     list = Dir.glob(file_filter)
@@ -163,4 +173,63 @@ class Assignment < ActiveRecord::Base
       end
     end
   end
+
+  def write_properties_file
+    if self.path_to_folder
+      file = File.join(self.path_to_folder, "assignment.properties")
+
+        properties = Hash.new
+        
+        logger.debug { "[DEBUG] " + properties.to_s }
+
+        #Populate file hash from fields
+        if self.prop_language
+          properties["programming.language"] = self.prop_language
+        end
+        
+        if self.prop_language_version
+          properties["programming.language.version"] = self.prop_language_version
+        end
+        
+        if self.prop_license
+          properties["license"] = self.prop_license
+        end
+        
+        if self.prop_license_url
+           properties["license.url"] = self.prop_license_url
+        end
+        
+        if self.prop_course
+           properties["course"] = self.prop_course
+        end
+        
+        if self.prop_info_url
+           properties["info.url"] = self.prop_info_url
+        end
+
+        if self.prop_estimated_experience
+           properties["estimated.experience"] = self.prop_estimated_experience
+        end
+
+        if self.prop_estimated_time
+           properties["estimated.time"] = self.prop_estimated_time
+        end
+
+        if self.prop_estimated_size
+           properties["estimated.size"] = self.prop_estimated_size
+        end
+
+        if self.prop_copyright
+           properties["copyright"] = self.prop_copyright
+        end
+        
+        JavaProperties::Properties.write(file, properties, "Properties file for #{self.title}, generated on #{DateTime.now}")        
+        
+    else
+      logger.error { "[ERROR] Assignment folder not found. Not writing to the properties file!" }
+    end
+  end
+
+
+
 end

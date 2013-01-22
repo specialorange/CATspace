@@ -30,3 +30,5 @@
 <% for assignment in assignments %>
 	<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
 <% end %>
+
+<%= will_paginate assignments unless sort == 'comments' %>

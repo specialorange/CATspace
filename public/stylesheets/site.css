@@ -66,8 +66,9 @@ div.footprint_item{
 }
 
 div.assignmentTitle{
-	font-size: 15px;
+	font-size: 19px;
 	font-weight: bold;
+	color: #3b5998;
 }
 
 
@@ -105,6 +106,8 @@ background-color : #FFFF99;
 #commentText{
 	padding-top: 2px;
 	margin-left:68px;
+	font-style: italic;
+	
 }
 
 #commentForm {
@@ -164,7 +167,7 @@ background-color : #FFFF99;
 }
 
 .activityItem {
-	margin-top: 3px;
+	margin-top: 8px;
 	margin-bottom: 5px;
 	margin-left: 8px;
 	font-size: 11px;
@@ -173,6 +176,7 @@ background-color : #FFFF99;
 .activityItemIcon {
 	float: left;
 	clear: none;
+	margin-right: 5px;
 }
 
 .activityItemText {
@@ -182,6 +186,7 @@ background-color : #FFFF99;
 
 
 .tag {
+	/* float: left; */
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 	color: #727272;
@@ -450,8 +455,16 @@ ul.fileList li {
     border-bottom:1px solid #DFDFDF;	
 }
 
+.fileContent {
+	background-color: #ebebeb;
+	border: 2px solid #b0b0b0;
+	padding: 5px;
+}
+
 #synopsis_field {
-	font-size: 13px;
+	font-size: 11px;
+	
+	font-family: ;
 }
 
 
@@ -468,7 +481,7 @@ ul.fileList li {
     border-top:1px solid #eee;
     border-left:1px solid #eee;
 
-    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-family: Helvetica, Tahoma, Arial, Verdana, sans-serif;
     font-size:100%;
     line-height:130%;
     text-decoration:none;
@@ -549,81 +562,24 @@ button.positive, .buttons a.positive{
     color:#fff;
 }
 
-/* THIS IS FOR STAR RATINGS from*/
-/* star rating code - use lists because its more semantic */
-/* No javascript required */
-/* all the stars are contained in one matrix to solve rollover problems with delay */
-/* the background position is just shifted to reveal the correct image. */
-/* the images are 16px by 16px and the background position will be shifted in negative 16px increments */
-/*  key:  B=Blank : O=Orange : G = Green * /
-/*..... The Matrix ....... */
-/* colours ....Background position */
-/* B B B B B - (0 0)*/
-/* G B B B B - (0 -16px)*/
-/* G G B B B - (0 -32px)*/
-/* G G G B B - (0 -48px)*/
-/* G G G G B - (0 -64px)*/
-/* G G G G G - (0 -80px)*/
-/* O B B B B - (0 -96px)*/
-/* O O B B B - (0 -112px)*/
-/* O O O B B - (0 -128px)*/
-/* O O O O B - (0 -144px)*/
-/* O O O O O - (0 -160px)*/
+div#authors_area {
+	clear:both; 
+	padding-left:3px;
+	width: 500px;
+}
+
+.comment_text_area {
+	width: 470px;
+	height: 100px;
+}
+
+.file_text_area {
+	font: 12px "Courier New", Courier, mono;
+	color: #000;
+	border: 1px solid #afafaf;
+}
 
 
-/* the default rating is placed as a background image in the ul */
-/* use the background position according to the table above to display the required images*/
-.rating{
-    width:80px;
-    height:16px;
-    margin:0 0 20px 0;
-    padding:0;
-    list-style:none;
-    clear:both;
-    position:relative;
-    /* background: url(http://web1.tunnlr.com:10351//images/activity_icons/star-matrix1.gif) no-repeat 0 0; */
-	background: url('/images/activity_icons/star-matrix1.gif') no-repeat 0 0;
+a#edit_tags_link {
+	float: left;
 }
-/* add these classes to the ul to effect the change to the correct number of stars */
-.nostar {background-position:0 0}
-.onestar {background-position:0 -16px}
-.twostar {background-position:0 -32px}
-.threestar {background-position:0 -48px}
-.fourstar {background-position:0 -64px}
-.fivestar {background-position:0 -80px}
-ul.rating li {
-    cursor: pointer;
- /*ie5 mac doesn't like it if the list is floated\*/
-    float:left;
-    /* end hide*/
-    text-indent:-999em;
-}
-ul.rating li a {
-    position:absolute;
-    left:0;
-    top:0;
-    width:16px;
-    height:16px;
-    text-decoration:none;
-    z-index: 200;
-}
-ul.rating li.one a {left:0}
-ul.rating li.two a {left:16px;}
-ul.rating li.three a {left:32px;}
-ul.rating li.four a {left:48px;}
-ul.rating li.five a {left:64px;}
-ul.rating li a:hover {
-    z-index:2;
-    width:80px;
-    height:16px;
-    overflow:hidden;
-    left:0;
-	background: url('<%= request.protocol + request.host_with_port + "//images/activity_icons/star-matrix1.gif"%>') no-repeat 0 0;
-
-}
-ul.rating li.one a:hover {background-position:0 -96px;}
-ul.rating li.two a:hover {background-position:0 -112px;}
-ul.rating li.three a:hover {background-position:0 -128px}
-ul.rating li.four a:hover {background-position:0 -144px}
-ul.rating li.five a:hover {background-position:0 -160px}
-/* end rating code */

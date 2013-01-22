@@ -40,7 +40,7 @@ function submitAssignmentAjax(vars) {
 		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Assignments
 	</div>
 	<div id="assignment_list">
-		<%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @user.assignments, :sort => 'date'}, :layout => false %>
+		<%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @sorted_assignments, :sort => 'date'}, :layout => false %>
 	</div>
 	
 	<br>
