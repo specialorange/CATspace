@@ -1,0 +1,21 @@
+<% if is_author%>
+<div id="<%=field_name%>_field"  class="editInPlaceField"onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('<%=field_name%>');">
+	<%if (field_value != "") and field_value %>
+		<%= field_value %>
+	<%else%>
+		None
+	<%end%>
+</div>
+<div id="<%=field_name%>_editing_section" class="miniEditingSection" style="display:none;">
+	<div class="buttons">
+		<button value="Save" onClick="doAjaxInPlaceSave('<%=field_name%>');" class="positive">&radic;</button>
+		<button value="Cancel" onClick="doAjaxInPlaceCancel('<%=field_name%>');" class="negative">X</button>
+	</div>
+	<input id="<%=field_name%>_editor" type="text" size="40" value="<%=field_value%>">
+</div>
+<div id="<%=field_name%>_saving_section" style="display:none;">
+	Saving...
+</div>
+<% else %>
+	<%= field_value %>
+<% end %>

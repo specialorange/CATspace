@@ -161,7 +161,7 @@ ul.rating li.five a:hover {background-position:0 -160px}
 /* end rating code */
 </style>
 
-<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
+<% if @is_author %>
 <div class="assignmentHeader">  
 	<div class="assignmentTitle">
 		<div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');">
@@ -203,7 +203,7 @@ ul.rating li.five a:hover {background-position:0 -160px}
 
 
 <div id="contentPanel">
-	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
+	<% if @is_author %>
 
 	<div id="tags_field">
 		  <%= render :partial => "editable_linked_tag_list", :locals => { :assignment_id => @assignment.id, :list => @assignment.tag_list, :user_id => @fb_user.id }%>
@@ -230,15 +230,21 @@ ul.rating li.five a:hover {background-position:0 -160px}
 				<%else%>
 					<%=truncate(strip_tags(@assignment.prop_license), 30, "...") %>
 				<%end%>
-				<li>Language: <%=truncate(strip_tags(@assignment.prop_language), 30, "...") %></li>
+				<li>Language: <%=truncate(strip_tags(@assignment.prop_language), 30, "...") %> <%=truncate(strip_tags(@assignment.prop_language_version), 30, "...") %></li>
 			</ul>
 		</div>
 	</div>
 		
 	
-	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
+	<% if @is_author %>
 	<p style="clear:both;">
-  		<div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= @assignment.synopsis %></div>
+  		<div id="synopsis_field"  class="editInPlaceField" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');">
+			<%if @assignment.synopsis and @assignment.synopsis != "" %>
+				<%= @assignment.synopsis %>
+			<%else%>
+				None
+			<%end%>
+		</div>
 		<div id="synopsis_editing_section" style="display:none;">
 			<textarea rows="20" cols="52" id="synopsis_editor"><%=@assignment.synopsis%></textarea><br>
 			<div class="buttons">
@@ -255,6 +261,70 @@ ul.rating li.five a:hover {background-position:0 -160px}
   		<div id="synopsis_field"><%= @assignment.synopsis %></div>
 	</p>
 	<% end %>
+
+<div id="moreMetaBox">
+	<div id="moreMetaHeader" onClick="flipVisibility('moreMetaContent');">All Metadata</div>
+	<div id="moreMetaContent">
+		<table border="0" cellspacing="0" cellpadding="5">
+			<tr>
+				<td class="moreMetaKey">Language</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_language", :field_value => @assignment.prop_language, :is_author => @is_author} %>
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">Lang Version</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_language_version", :field_value => @assignment.prop_language_version, :is_author => @is_author} %>
+
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">License</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_license", :field_value => @assignment.prop_license, :is_author => @is_author} %>
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">License URL</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_license_url", :field_value => @assignment.prop_license_url, :is_author => @is_author} %>
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">Copyright</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_copyright", :field_value => @assignment.prop_copyright, :is_author => @is_author} %>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="moreMetaKey">Course</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_course", :field_value => @assignment.prop_course, :is_author => @is_author} %>
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">Course Info URL</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_info_url", :field_value => @assignment.prop_info_url, :is_author => @is_author} %>
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">Est. Experience</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_estimated_experience", :field_value => @assignment.prop_estimated_experience, :is_author => @is_author} %>
+				</td>
+			</tr>
+			<tr>
+				<td class="moreMetaKey">Est. Size</td>
+				<td class="moreMetaValue">
+					<%= render :partial =>"partials/ajax_edit_in_place_mini", :locals => {:field_name => "prop_estimated_size", :field_value => @assignment.prop_estimated_size, :is_author => @is_author} %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
 
 <p style="clear:both;"></p>
 <div class="boxHeaderFlexible" >Comments</div>
@@ -337,20 +407,10 @@ ul.rating li.five a:hover {background-position:0 -160px}
 		There is no recent activity on this assignment.
 	<% end %>
 	<p> </p>
-	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%>
+	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%></div>
 	<% @more_assignments_by_author.each { |assignment_by_author| 	%>
-		<div class="assignmentItem"><%= link_to assignment_by_author.title, :action => "show", :id => assignment_by_author.id %></div>
+		<div class="miniAssignmentItem"><%= link_to truncate(assignment_by_author.title, 17, "..."), :action => "show", :id => assignment_by_author.id %></div>
 	<% } %>
 
-	</div>
-	<div style="height:200px"></div>
-	
-	
-	
-</div>
-<div style="clear:both;">
-	<hr>
-	<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
-	<%= link_to 'All Assignments', assignments_path %><br>
 </div>
 

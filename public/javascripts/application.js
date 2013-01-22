@@ -18,7 +18,7 @@
   }
   
   function reveal(animation){
-    return animation.to('height', 'auto').from('0px').to('width', 'auto').from('0px').to('opacity', 1).from(0).blind().show()
+    return animation.to('height', 'auto').from('0px').to('opacity', 1).from(0).blind().show()
   }
   
   function highlightDiv(div_id){
@@ -38,17 +38,25 @@
     $(div_id).setInnerFBML(data); 
   }
   
+function flipVisibility(div_id) {
+	if (document.getElementById(div_id).getStyle('display') == "block") {
+		document.getElementById(div_id).setStyle('display','none');
+	} else {
+		document.getElementById(div_id).setStyle('display','block');
+	}
+}
+
 //For in-place editing
 function flashObj(obj) {    
-            obj.setStyle('background-color', "#EEE");
+            obj.setStyle('background-color', "#EFFFDF");
 			obj.setStyle('border', "1px solid #0ACA22");
-			obj.setStyle('padding', "3px");
+			// obj.setStyle('padding', "3px");
         }
 
 function unFlashObj(obj) {    
             obj.setStyle('background-color', "#FFFFFF");
-			obj.setStyle('border', "none");
-			obj.setStyle('padding', "none");			
+			obj.setStyle('border', "1px solid #FFFFFF");
+			// obj.setStyle('padding', "none");
         }
   
   //Ajax form submit with a confirmation dialog

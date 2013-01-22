@@ -39,7 +39,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1.xml
   def show
     @assignment = Assignment.find(params[:id])
-
+    @is_author = ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
     if @assignment.published or @assignment.facebook_user == @fb_user
       @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}.first(7)
       @upload_url = ActionController::Base.asset_host + "/assignments/upload/";
@@ -58,7 +58,7 @@ class AssignmentsController < ApplicationController
       @starsHash = {0 => "nostar", 1 => "onestar", 2 => "twostar", 3 => "threestar", 4 => "fourstar", 5 => "fivestar"}
       @how_many_stars = @starsHash.fetch(rounded_rating)
     else 
-      flash[:notice] = 'Sorry! The assignment that you tried to see has been unpublished, please try again later...'
+      flash[:notice] = 'Sorry! The assignment that you tried to access is in an unpublished state. Please try again later.'
       # TODO: :back didn't work under FB, provide smarter navigation later on
       redirect_to :controller => "home", :action => "index"
     end
@@ -85,23 +85,35 @@ class AssignmentsController < ApplicationController
     # so I had to check for a tag parameter in the call and then
     # do the tagging manually
     if params["name"] != "tags"
-      if @assignment.update_attribute(params["name"], params["value"])
-        logger.info "*********** CURRENT ASS PUBLISH STATUS: " + @assignment.published.to_s
-        @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::UpdateAssignmentString) unless not @assignment.published       
-        render :partial => "ajaxy_updated_param", :locals => {:value => params["value"]}, :layout => false
+      if (!params["value"]) or (params["value"] == "") or (params["value"] == "0")
+        val = ""
+      else
+        val = params["value"]
+        logger.debug { "[DEBUG] value passed for ajax update is: #{params["value"]}" }
+      end
+      if @assignment.update_attribute(params["name"], val)
+        if /prop_.*/.match(params["name"])
+          ZipWorker.asynch_write_properties_file(:id => @assignment.id)
+          ZipWorker.asynch_zip_file(:id => @assignment.id, :target => @assignment.path_to_attachment, :source => @assignment.path_to_folder)          
+          # @assignment.write_properties_file        
+        else
+          @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::UpdateAssignmentString) unless not @assignment.published
+        end
+        if val and (val != "") 
+          render :partial => "ajaxy_updated_param", :locals => {:value => val}, :layout => false
+        else
+          render :partial => "ajaxy_updated_param", :locals => {:value => "None"}, :layout => false
+        end
       else
         render :partial => "ajaxy_updated_param", :locals => {:value => "!!!failed!!!"}, :layout => false    
       end
     else
-      logger.info "*********** VALUE = " + params["value"]
-      
-      # TODO: get rid of this workaround
+      #TODO: get rid of this workaround
       unless params["value"] == "0"
         @assignment.tag_list = params["value"]
       else
         @assignment.tag_list = ""
       end
-      
       if @assignment.save
         @fb_user.activity_items.create(:assignment_id => @assignment.id, :sentence => ActivityItem::TagAssignmentString) unless not @assignment.published               
         render :partial => "editable_linked_tag_list", :locals => { :assignment_id => @assignment.id, :list => @assignment.tag_list, :user_id => @fb_user.id }
@@ -231,8 +243,12 @@ class AssignmentsController < ApplicationController
   def save_file
     @assignment = Assignment.find(params[:id])
     if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
-      # logger.debug { "[DEBUG] params[:path] = #{params[:path]} and params[:content] = #{params[:content]}" }
+
       @assignment.write_file(params[:path], params[:content])
+      # If this is an assignment properties file, then we need to read the properties again
+      if params[:path] == "assignment.properties"
+        @assignment.read_properties_file
+      end
       flash[:notice] = "Successfully saved file #{params[:path]}"
     else
       flash[:alert] = "Only authors can edit files within an assignment!"
@@ -331,7 +347,8 @@ class AssignmentsController < ApplicationController
       assignment = Assignment.find(item.assignment_id)
       # TODO: Check if User has the rights to access the assignment. Also check if the assignment actually has files
       send_file assignment.path_to_attachment, :type => "application/zip"
-      item.delete
+      item.destroy
+      assignment.update_attribute(:stat_downloads, assignment.stat_downloads + 1) 
     else
       flash[:alert] = "Could not find the assignment. Please try again"
       redirect_to :back

@@ -88,6 +88,12 @@ class Assignment < ActiveRecord::Base
     FileUtils.rm_rf self.path_to_folder
     self.update_attributes(:attachment_name => NULL)
   end
+
+  def remove_zip
+    # delete the file from the filesystem
+    FileUtils.rm_rf self.path_to_attachment
+  end
+
   
   def remove_file(path)
     if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
@@ -122,9 +128,7 @@ class Assignment < ActiveRecord::Base
       file = File.join(self.path_to_folder, "assignment.properties")
       if File.exists? file
         properties = JavaProperties::Properties.new(file)
-        logger.debug { "[DEBUG] " + properties.to_s }
         if properties["sameer"]
-          logger.debug {"[DEBUG] "+ properties["sameer"]}
         end
 
         # remove_column :assignments, :prop_estimated_time
@@ -186,10 +190,8 @@ class Assignment < ActiveRecord::Base
     if self.path_to_folder
       file = File.join(self.path_to_folder, "assignment.properties")
 
-        properties = Hash.new
+        properties = JavaProperties::Properties.new(file)
         
-        logger.debug { "[DEBUG] " + properties.to_s }
-
         #Populate file hash from fields
         if self.prop_language
           properties["programming.language"] = self.prop_language
@@ -229,10 +231,9 @@ class Assignment < ActiveRecord::Base
 
         if self.prop_copyright
            properties["copyright"] = self.prop_copyright
-        end
-        
-        JavaProperties::Properties.write(file, properties, "Properties file for #{self.title}, generated on #{DateTime.now}")        
-        
+        end     
+        # JavaProperties::Properties.write(file, properties, "Properties file for #{self.title}, generated on #{DateTime.now}")        
+        properties.store(file, "Properties file for #{self.title}, generated on #{DateTime.now}")                
     else
       logger.error { "[ERROR] Assignment folder not found. Not writing to the properties file!" }
     end

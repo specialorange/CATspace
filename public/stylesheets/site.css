@@ -10,6 +10,16 @@ h1 {
 	font-size: 18px;
 }
 
+/*Make pre wrap*/
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+
 #userProfileInfo {
 	margin-top: 5px;
 	font-size: 11px;
@@ -71,6 +81,10 @@ div.assignmentTitle{
 	color: #3b5998;
 }
 
+.editInPlaceField {
+	padding: 3px;
+	border: 1px solid white;
+}
 
 div#ajax_control{   
     float:right;
@@ -78,6 +92,31 @@ div#ajax_control{
     font-size:15px;
 }
 
+#moreMetaBox {
+	clear: left;
+	border: 1px solid #caccd3;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.moreMetaKey {
+	color: #878787;
+	padding: 3px;
+}
+
+.moreMetaValue {
+	vertical-align: top;	
+}
+
+#moreMetaHeader {
+	background-color: #e4e6ef;
+	font-size: 12px;
+	padding: 3px;
+}
+
+#moreMetaContent {
+	display: none;
+}
 .css1 { font-size: 1.0em; }
   .css2 { font-size: 1.2em; }
   .css3 { font-size: 1.4em; }
@@ -118,6 +157,14 @@ background-color : #FFFF99;
 	border-top-color: #999999;
 }
 
+.miniEditingSection .buttons {
+	display: inline-block;
+	float: right;
+}
+
+.miniEditingSection .buttons .button {
+	margin-top: 8px;
+}
 
 .boxHeaderFlexible {
 	background-color: rgb(236, 239, 245);
@@ -214,6 +261,14 @@ a.whiteLink {
 	color: #FFFFFF;
 }
 
+.miniAssignmentItem {
+	margin: 5px 0;
+	padding: 5px;
+	border-bottom: 1px solid #aaa;
+	font-size: 12px;
+	font-weight: bold;
+}
+
 .assignmentItem {
 	background-color: #EDF1F6;
 	border: 1px solid #CCCCCC;
@@ -281,7 +336,7 @@ input{
 }
 
 div#title_editing_section input, input.titleField{
-	font-size: 15px;
+	font-size: 19px;
 	font-weight: bold;
 }
 
@@ -462,9 +517,7 @@ ul.fileList li {
 }
 
 #synopsis_field {
-	font-size: 11px;
-	
-	font-family: ;
+	font-size: 13px;
 }
 
 
