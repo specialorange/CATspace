@@ -51,7 +51,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def path_to_attachment(filename = self.attachment_name)
-    FileSystem.PathToAttachment + filename
+    if filename
+      FileSystem.PathToAttachment + filename
+    else
+      false
+    end
   end
   
   def path_to_folder
@@ -70,8 +74,12 @@ class Assignment < ActiveRecord::Base
   
   def before_destroy
     # delete the file from the filesystem
-    FileUtils.rm_rf self.path_to_attachment
-    FileUtils.rm_rf self.path_to_folder
+    if self.path_to_attachment
+      FileUtils.rm_rf self.path_to_attachment
+    end
+    if self.path_to_folder
+      FileUtils.rm_rf self.path_to_folder
+    end
   end
   
   def remove_attachment
