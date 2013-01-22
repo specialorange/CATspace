@@ -39,7 +39,7 @@ class AssignmentsController < ApplicationController
   def show
     @assignment = Assignment.find(params[:id])
     @is_author = ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
-    if @assignment.published or @assignment.facebook_user == @fb_user
+    if @assignment.published or @is_author
       @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}.first(7)
       @more_assignments_by_author = Assignment.find(:all, :conditions => ["facebook_user_id = ? AND published = true AND id != ?", @assignment.facebook_user_id, @assignment.id], :limit => 5)
     
