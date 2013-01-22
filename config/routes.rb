@@ -45,11 +45,12 @@ ActionController::Routing::Routes.draw do |map|
   map.authors('/assignments/:id/authors', :controller => "assignments", :action => "authors")
   map.add_authors('/assignments/:id/add_authors', :controller => "assignments", :action => "add_authors")  
   map.remove_author('/assignments/:id/remove_author', :controller => "assignments", :action => "remove_author")
+  map.remove_file('/assignments/remove_file/:id', :controller => "assignments", :action => "remove_file")  
   map.profile('/profile/:id', :controller => "facebook_users", :action => "profile")
   map.assignments('assignments',:controller => "assignments", :action => "index")
   map.home('home',:controller => "home", :action => "index")  
   map.search('search',:controller => "assignments", :action => "search")
-  map.people('people',:controller => "facebook_users", :action => "profile")    
+  map.people('people',:controller => "facebook_users", :action => "index")    
   map.my_catspace('me',:controller => "facebook_users", :action => "my")      
 
   # Install the default routes as the lowest priority.

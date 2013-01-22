@@ -1,11 +1,24 @@
 <%= fb_title "Assignments"%>
+<%= render :partial =>"partials/activity_item_ajax_js_include" %>
+<script language="JavaScript" type="text/javascript"> 
+
+function submitAssignmentAjax(vars) {
+  url = '<%= url_for(:action => "list_assignments", :canvas => false, :only_path => false,
+  request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
+
+  ajaxCall( vars, url, 'assignment_list'); 
+  return false;
+}
+// Unobtrusively add sumbit ajax to the form
+document.getElementById('ajax_button').addEventListener('click',submitAjax);
+</script>
+
+
 <%= render :partial =>"assignments_header" %>
 <div class="boxHeaderFlexible">Assignments</div>
 
-<% for assignment in @assignments %>
-<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
-<% end %>
+<div id="assignment_list">
+	<%= render :partial => "assignment_list", :locals => {:assignments => @sorted_assignments}, :layout => false %>	
+</div>
 
 <br />
-
-<%= link_to 'New assignment', new_assignment_path %>

@@ -153,3 +153,26 @@ function unFlashObj(obj) {
    }            
    return false;
  } 
+
+  function ajaxDeleteFile(id, url, div_id, path){ 
+   try {
+		alert("2");
+		//Confirmation Dialog sends request on Confirm    
+	   dlg = new Dialog(); 
+	   dlg.showChoice("Confirm Delete", "Are you sure you want to delete this file?", "Yes", "No"); 
+	   dlg.onconfirm = function() { 
+			//obscure(highlightDiv(div_id).checkpoint()).go();
+			var ajax = new Ajax();
+       		ajax.responseType = Ajax.FBML; 
+       		ajax.ondone = function(data) {  
+         		//Delete the div.
+				obscure(highlightDiv(div_id).checkpoint()).go();
+       		}; 
+       		ajax.post(url+"/"+id, "path="+path); 
+		}
+	}  
+   catch(err) {
+     new Dialog().showMessage("Error","Something weird happened. Sorry. This is an Alpha: "+ err);
+   }            
+   return false;
+ } 

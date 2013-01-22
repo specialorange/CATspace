@@ -1,0 +1,15 @@
+</br>
+<% form_for assignment, :html => {:id => "update_tag_form"} do |f| %>
+
+    <%= f.error_messages %>
+ <%= label_tag "Edit tags: "%> 
+   <%= f.text_field :tag_list %> 
+	<%= f.hidden_field :id %>
+<input type="button" value="SubmitOLD" onclick="submitTagUpdate('assignment_id=<%=assignment.id%>')" />
+<input type="button" value="SubmitFORM" onclick="submitFormFORLOCO('update_tag_form', 'tags_field')" />
+
+<% end %>
+
+
+
+</br>

@@ -1,9 +1,12 @@
-<div id="tags_area">
 
 	<div id="tags_field">
+		<br>
 	<% list.each do |tag| %>
 	<span class="tag"><%= link_to tag, "http://apps.facebook.com/" + ENV['FACEBOOKER_RELATIVE_URL_ROOT'] + '/assignments/tag/' + tag %></span>
 	<% end %>
+	<span><%= link_to "(edit tags)", "#", :onclick => "requestTagUpdate('user=#{user_id}&assignment_id=#{assignment_id}')" %></span>
+	</br>
+	</br>
 	</div>
-
-</div>
+	
+	

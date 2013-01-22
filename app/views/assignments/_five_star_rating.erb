@@ -1,0 +1,8 @@
+	<ul id="rating_1" class="rating <%= @how_many_stars %>">
+	<li class="one"><a href="#" title="1" onclick="submit_rating(1,<%= assignment_id %>,'five_star_rating'); return false;">1</a></li>
+	<li class="two"><a href="#" title="2" onclick="submit_rating(2,<%= assignment_id %>,'five_star_rating'); return false;">2</a></li>
+	<li class="three"><a href="#" title="3" onclick="submit_rating(3,<%= assignment_id %>,'five_star_rating'); return false;">3</a></li>
+	<li class="four"><a href="#" title="4" onclick="submit_rating(4, <%= assignment_id %>,'five_star_rating'); return false;">4</a></li>
+	<li class="five"><a href="#" title="5" onclick="submit_rating(5, <%= assignment_id %>,'five_star_rating'); return false;">5</a></li>
+	</ul> (Rated <%= @ratings_size %> times.)</small>
+	

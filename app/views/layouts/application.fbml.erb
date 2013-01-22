@@ -15,7 +15,7 @@
 <% fb_tabs do %>
 	<%= fb_tab_item("Home", home_url, :selected => controller_selected?('home'))%>
 	<%= fb_tab_item("Assignments", assignments_url, :selected => controller_selected?('assignments'))%>
-	<%= fb_tab_item("People", "#")%>
+	<%= fb_tab_item("People", people_url, :selected => people_selected?)%>
 	<%= fb_tab_item("My CatSpace", profile_url(:id => ""), :selected => self_profile_selected?)%>
 <% end %>
 <% if flash[:alert]%>
@@ -35,10 +35,8 @@
 
 <% end %>
 <div id="current_content">
-
 <%= yield %>
 </div>
 <div id="footer"></div>
 </div>
 </div>
-

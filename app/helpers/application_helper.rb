@@ -20,6 +20,10 @@ module ApplicationHelper
    params[:controller].to_s == "facebook_users" and params[:action].to_s == "profile" and (!params[:id])
   end
   
+  def people_selected?
+    params[:controller].to_s == "facebook_users" and params[:action].to_s == "index"
+  end
+  
   #Low-def version to highlight a tab only if the controller matches
   def controller_selected?(controller_name)
    params[:controller].to_s == controller_name.to_s
@@ -33,7 +37,11 @@ module ApplicationHelper
    session[:ajaxy]
   end
   
-
+  # For links within content rendered by AJAX calls, eg: canvas("/assignments")
+  def canvas(suffix)
+    "http://apps.facebook.com/" + ENV['FACEBOOKER_RELATIVE_URL_ROOT'] + suffix
+  end
+  
   CreateAssignmentString = "created assignment "
   UpdateAssignmentString = "updated assignment "
   CommentAssignmentString = "commented on assignment "

@@ -20,9 +20,9 @@
 		<% end %>
 	
 	  <% if sort == 'comments' %>
-			<span class="grayButtonPressed"><%= link_to_remote "Comments", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=comments')" %></span>	
+			<span class="grayButtonPressed"><%= link_to_remote "Most Comments", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=comments')" %></span>	
 		<% else %>
-			<span class="grayButton"><%= link_to_remote "Comments", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=comments')" %></span>	
+			<span class="grayButton"><%= link_to_remote "Most Comments", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=comments')" %></span>	
 		<% end %>
 	</p>
 </div>

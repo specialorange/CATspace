@@ -1,4 +1,5 @@
 # require '../utility/java_props'
+require 'java_properties'
 require_dependency "search"
 
 class Assignment < ActiveRecord::Base
@@ -7,6 +8,10 @@ class Assignment < ActiveRecord::Base
   acts_as_rateable
   searches_on :title, :synopsis  
   
+  # for will_paginate plugin
+  cattr_reader :per_page
+  @@per_page = 5
+     
   belongs_to :facebook_user, :foreign_key => :facebook_user_id, :class_name => "FacebookUser"
   has_many :comments
   has_many :activity_items 
@@ -23,9 +28,7 @@ class Assignment < ActiveRecord::Base
     end
     false
   end
-  
-  
-  
+
   def attach_file(uploaded_file, i=1)
     # TODO: Destroy anything if its already there. We're assuming that controller has taken care of verifications.
     # if !self.attachment_name
@@ -78,6 +81,13 @@ class Assignment < ActiveRecord::Base
     self.update_attributes(:attachment_name => NULL)
   end
   
+  def remove_file(path)
+    if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
+      file = File.join(self.path_to_folder, path)
+      FileUtils.rm_rf file
+    end
+  end
+  
   def files(relative = true)
     file_filter = File.join(path_to_folder,"**","*")
     list = Dir.glob(file_filter)
@@ -86,6 +96,71 @@ class Assignment < ActiveRecord::Base
     else
       list.each{ |file| file.slice!(path_to_folder)}
       return list
+    end
+  end
+  
+  def read_properties_file
+    if self.path_to_folder
+      file = File.join(self.path_to_folder, "assignment.properties")
+      if File.exists? file
+        properties = JavaProperties::Properties.new(file)
+        logger.debug { "[DEBUG] " + properties.to_s }
+        if properties["sameer"]
+          logger.debug {"[DEBUG] "+ properties["sameer"]}
+        end
+
+        # remove_column :assignments, :prop_estimated_time
+        # remove_column :assignments, :prop_estimated_size
+        # remove_column :assignments, :prop_copyright
+
+        #Populate fields
+        
+        if properties["programming.language"]
+          self.prop_language = properties["programming.language"]
+        end
+        
+        if properties["programming.language.version"]
+          self.prop_language_version = properties["programming.language.version"]
+        end
+        
+        if properties["license"]
+          self.prop_license = properties["license"]
+        end
+        
+        if properties["license.url"]
+          self.prop_license_url = properties["license.url"]
+        end
+        
+        if properties["course"]
+          self.prop_course = properties["course"]
+        end
+        
+        if properties["info.url"]
+          self.prop_info_url = properties["info.url"]
+        end
+
+        if properties["estimated.experience"]
+          self.prop_estimated_experience = properties["estimated.experience"]
+        end
+
+        if properties["estimated.time"]
+          self.prop_estimated_time = properties["estimated.time"]
+        end
+
+        if properties["estimated.size"]
+          self.prop_estimated_size = properties["estimated.size"]
+        end
+
+        if properties["copyright"]
+          self.prop_copyright = properties["copyright"]
+        end
+        
+        self.save
+        
+      else
+        logger.info { "[INFO] No Properties file found!" }
+        false
+      end
     end
   end
 end

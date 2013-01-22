@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090328062157) do
+ActiveRecord::Schema.define(:version => 20090414113040) do
 
   create_table "activity_items", :force => true do |t|
     t.integer  "facebook_user_id", :null => false
@@ -25,11 +25,21 @@ ActiveRecord::Schema.define(:version => 20090328062157) do
     t.integer  "rating"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "facebook_user_id",                       :null => false
-    t.boolean  "pref_comment_notify", :default => false
+    t.integer  "facebook_user_id",                             :null => false
+    t.boolean  "pref_comment_notify",       :default => false
     t.string   "attachment_name"
-    t.boolean  "queue_flag",          :default => false
-    t.boolean  "published",           :default => false
+    t.boolean  "queue_flag",                :default => false
+    t.boolean  "published",                 :default => false
+    t.string   "prop_language"
+    t.string   "prop_language_version"
+    t.string   "prop_license"
+    t.string   "prop_license_url"
+    t.string   "prop_course"
+    t.string   "prop_info_url"
+    t.string   "prop_estimated_experience"
+    t.string   "prop_estimated_time"
+    t.string   "prop_estimated_size"
+    t.string   "prop_copyright"
   end
 
   create_table "authorships", :force => true do |t|

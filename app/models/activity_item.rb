@@ -6,7 +6,8 @@ class ActivityItem < ActiveRecord::Base
   CreateAssignmentString = "created "
   UpdateAssignmentString = "updated "
   CommentAssignmentString = "commented on "
-
+  TagAssignmentString = "tagged "
+  
   belongs_to :facebook_user
   belongs_to :assignment
 end

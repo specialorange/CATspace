@@ -1,0 +1,15 @@
+<%= fb_title "People" %>
+
+<div id="contentPanel">
+	<div class="boxHeaderFlexible">
+		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Friends on CatSpace
+	</div>
+	
+	<%= render :partial =>"partials/people_sidebar_list", :locals => {:users => @friendUsers} %>
+	
+	<div class="boxHeaderFlexible">
+		CATspace Users
+	</div>
+
+	<%= render :partial =>"partials/people_sidebar_list", :locals => {:users => @allUsers} %>
+</div>

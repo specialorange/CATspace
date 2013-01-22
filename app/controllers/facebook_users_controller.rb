@@ -24,6 +24,24 @@ class FacebookUsersController < ApplicationController
     end
   end  
   
+  def index
+    if(params[:id])
+      @user = FacebookUser.find(params[:id])
+    else
+      @user = @fb_user
+    end
+    
+    if(@user.id == @fb_user.id)
+      @self = true
+    else
+      @self = false
+    end
+
+    @friendUsers = @user.friends_with_this_app
+    
+    @allUsers = FacebookUser.all
+  end
+  
   def list_assignments
     user = FacebookUser.find(params[:user])
     sort = params[:sort]
@@ -34,7 +52,7 @@ class FacebookUsersController < ApplicationController
     elsif sort == 'rating'
       sorted_assignments = user.assignments.sort {|a,b| a.rating <=> b.rating}
     elsif sort == 'comments'
-      sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
+      sorted_assignments = user.assignments.sort {|a,b| b.comments.length <=> a.comments.length}
     else
       sorted_assignments = user.assignments
     end

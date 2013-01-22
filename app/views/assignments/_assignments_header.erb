@@ -1,8 +1,7 @@
 <div class="assignmentsHeader">
-	<a href="#">Latest</a> |
-	<a href="#">Most Downloaded</a> |
-	<a href="#">Most Voted</a> |
-	<a href="#">Most Discussed</a> |
-	<a href="#">Tags</a>
+	<%= link_to "Latest", :action => "index", :sort => "latest" %> |
+	<%= link_to "Most Downloads", :action => "index", :sort => "downloads" %> |
+	<%= link_to "Highest Rating", :action => "index", :sort => "rating" %> |
+	<%= link_to "Most Ratings", :action => "index", :sort => "mostRatings" %> |
+	<%= link_to "Most Comments", :action => "index", :sort => "mostComments" %>
 </div>
-	

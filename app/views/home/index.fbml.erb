@@ -1,5 +1,18 @@
 <%= fb_title "Home"%>
 <%= render :partial =>"partials/activity_item_ajax_js_include" %>
+<script language="JavaScript" type="text/javascript"> 
+
+function submitAssignmentAjax(vars) {
+  url = '<%= url_for(:action => "list_assignments", :canvas => false, :only_path => false,
+  request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
+//ajax.post('http://bashful.cs.vt.edu:3000/facebook_users/list_assignments/'+<%=@fb_user.uid%>);
+  ajaxCall( vars, url,'assignment_list'); 
+  return false;
+}
+// Unobtrusively add sumbit ajax to the form
+document.getElementById('ajax_button').addEventListener('click',submitAjax);
+</script>
+
 <div id="contentPanel">
 <div class="boxHeaderFlexible">Recent Activity</div>
 	<% for activity_item in @activity_items %>
@@ -7,21 +20,10 @@
 	<% end %>
 	<br>
 	<br>
-	<span class="grayButtonPressed">
-		<a href="#">Recommended for you</a>
-	</span>
-	<span class="grayButton">
-		<a href="#">Top Rated</a>
-	</span>
-	<span class="grayButton">
-		<a href="#">Top Downloads</a>
-	</span>
 	<br>
 	<br>
 	<div id="assignment_list">
-		<% for assignment in @recommended_assignments %>
-			<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
-		<%end%>
+		<%= render :partial => "ajaxy_list", :locals => {:user => @fb_user, :assignments => @recommended_assignments, :sort => 'recoms'}, :layout => false %>
 	</div>
 </div>
 <div id="rightPanel">

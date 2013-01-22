@@ -9,10 +9,6 @@ class ZipWorker < Workling::Base
     assignment = Assignment.find(options[:id]);
     logger.debug "[DEBUG] Inside unzip_file"
     logger.debug "[DEBUG] Inside unzip_file, id of record is " + options[:id].to_s
-    # logger.debug "[DEBUG] Inside unzip_file, path to attchment of record, taken from record, is " + assignment.path_to_attachment(assignment.attachment_name)
-    # source = assignment.path_to_attachment(assignment.attachment_name)
-    # logger.debug "[DEBUG] Inside unzip_file 2"
-    # target = assignment.path_to_folder;
 
     source = options[:source]
     target = options[:target]
@@ -34,6 +30,9 @@ class ZipWorker < Workling::Base
        } 
     }
   
+    #If all has gone well, let's read the properties
+    assignment.read_properties_file
+    
   rescue Zip::ZipDestinationFileExistsError => ex
     # I'm going to ignore this and just overwrite the files.
   

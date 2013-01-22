@@ -1,10 +1,10 @@
 <div class="assignmentItem">
 	<div class="assignmentTitle">
-		<%= link_to assignment.title, :controller=>"assignments", :action=>"show", :id=>assignment.id %>
+		<%= link_to assignment.title,  "http://apps.facebook.com/" + ENV['FACEBOOKER_RELATIVE_URL_ROOT'] + '/assignments/' + assignment.id.to_s %>
 	</div>
 	<div class="assignmentAuthor">
-		<a href="<%=profile_url(:id => assignment.facebook_user.id)%>">
-		<%= fb_name(assignment.facebook_user.uid, options={:linked => false, :useyou => false})%>
+		<a href="<%= canvas "/profile/"+assignment.facebook_user.id.to_s %>">
+			<%= fb_name(assignment.facebook_user.uid, options={:linked => false, :useyou => false}) %>
 		</a>
 		<%= render :partial =>"partials/author_list", :locals => {:assignment => assignment} %>
 		
@@ -14,8 +14,8 @@
 	</div>
 	<div class="assignmentOptions">
 		<% if assignment.facebook_user.id == @fb_user.id %>
-			<%= link_to 'Edit', edit_assignment_path(assignment) %> | 
-			<%= link_to 'Destroy', assignment, :confirm => 'Are you sure?', :method => :delete %>
+			<%= link_to 'Edit',  canvas('/assignments/' + assignment.id.to_s + "/edit") %> | 
+			<%= link_to 'Destroy',  canvas('/assignments/' + assignment.id.to_s), :confirm => 'Are you sure?', :method => :delete %>
 		<% end %>
 	</div>
 </div>
