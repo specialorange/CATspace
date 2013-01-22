@@ -409,7 +409,7 @@ ul.rating li.five a:hover {background-position:0 -160px}
 	<p> </p>
 	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%></div>
 	<% @more_assignments_by_author.each { |assignment_by_author| 	%>
-		<div class="miniAssignmentItem"><%= link_to truncate(assignment_by_author.title, 17, "..."), :action => "show", :id => assignment_by_author.id %></div>
+		<div class="miniAssignmentItem"><%= link_to truncate(assignment_by_author.title, 35, "..."), :action => "show", :id => assignment_by_author.id %></div>
 	<% } %>
 
 </div>

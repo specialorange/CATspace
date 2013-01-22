@@ -269,6 +269,14 @@ a.whiteLink {
 	font-weight: bold;
 }
 
+.unpublishedAssignmentItem {
+	background-color: #f4f6ed;
+	border: 1px solid #cbc1ae;
+	margin: 5px;
+	padding: 5px;
+}
+
+
 .assignmentItem {
 	background-color: #EDF1F6;
 	border: 1px solid #CCCCCC;
@@ -328,22 +336,22 @@ margin-left:0px;
 
 
 /* INPUT TEXT */
-input{  
+/*input{  
     border: 1px solid silver;  
     padding: 4px;  
     font-size: 1em;  
     background-color: #F8F8F8;  
-}
+}*/
 
 div#title_editing_section input, input.titleField{
 	font-size: 19px;
 	font-weight: bold;
 }
 
-input:focus{  
+/*input:focus{  
     border-color: #000;  
     background-color: #F5EFE6;  
-}
+}*/
 
 textarea {  
     border: 1px solid #888;  

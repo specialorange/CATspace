@@ -1,4 +1,8 @@
+<%if assignment.published%>
 <div class="assignmentItem">
+<%else%>
+<div class="unpublishedAssignmentItem">
+<%end%>
 	<div class="assignmentTitle">
 		<%= link_to assignment.title,  "http://apps.facebook.com/" + ENV['FACEBOOKER_RELATIVE_URL_ROOT'] + '/assignments/' + assignment.id.to_s %>
 	</div>

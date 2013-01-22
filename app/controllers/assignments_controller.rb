@@ -348,7 +348,12 @@ class AssignmentsController < ApplicationController
       # TODO: Check if User has the rights to access the assignment. Also check if the assignment actually has files
       send_file assignment.path_to_attachment, :type => "application/zip"
       item.destroy
-      assignment.update_attribute(:stat_downloads, assignment.stat_downloads + 1) 
+      if assignment.stat_downloads
+        dloads = assignment.stat_downloads + 1
+      else
+        dloads = 1
+      end
+      assignment.update_attribute(:stat_downloads, dloads) 
     else
       flash[:alert] = "Could not find the assignment. Please try again"
       redirect_to :back

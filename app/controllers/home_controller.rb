@@ -5,9 +5,9 @@ class HomeController < ApplicationController
     
     # TODO: stronger recommendation system. Right now is just by tag subscription   
     @subscribedTags = @fb_user.tag_list
-    @recommended_assignments = Assignment.find_tagged_with(@subscribedTags, :limit => 5)
+    @recommended_assignments = Assignment.find_tagged_with(@subscribedTags, :limit => 5, :conditions => {:published => true})
     @recommended_assignments.reject! { |assignment|
-      assignment.facebook_user == @fb_user
+      assignment.facebook_user == @fb_user or assignment.is_author? @fb_user
     }
     @userTags = FacebookUser.tag_counts 
     @assignmentTags = Assignment.tag_counts
