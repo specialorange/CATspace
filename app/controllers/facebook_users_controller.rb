@@ -63,21 +63,15 @@ class FacebookUsersController < ApplicationController
     sort = params[:sort]
     if sort == 'title'
       sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'title ASC'
-      #sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
     elsif sort == 'date'
       sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'created_at DESC'
-      #sorted_assignments = assignments.sort {|a,b| b.created_at <=> a.created_at}
     elsif sort == 'rating'
       sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'rating DESC'
-      #sorted_assignments = user.assignments.sort {|a,b| b.rating <=> a.rating}.first(5)
     elsif sort == 'comments'
-      # TODO: it would be nice to have a stat_comments to be able to check totals for pagination
-      sorted_assignments = user.assignments.sort {|a,b| b.comments.length <=> a.comments.length}
+      sorted_assignments = user.assignments.sort {|a,b| b.comments.count <=> a.comments.count}
     else
       sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'created_at DESC'
-      #sorted_assignments = user.assignments.first(5)  
     end
-    # user = facebook_session.user
     render :partial => "ajaxy_list", :locals => {:user => user, :assignments => sorted_assignments, :sort => sort}, :layout => false
   end  
   

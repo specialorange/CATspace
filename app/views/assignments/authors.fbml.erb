@@ -29,8 +29,7 @@
 <br>
 
 <h2>Add Authors</h2>
-<%= form_tag add_authors_url(:id => @assignment.id)%>
-<%= fb_multi_friend_input(:condensed => true)%>
-<%= submit_tag "Add these people as authors"%>
-
+	<%= form_tag add_authors_url(:id => @assignment.id)%>
+	<%= fb_multi_friend_input(:condensed => true)%>
+	<%= submit_tag "Add these people as authors", :class => "csp"%>
 </form>

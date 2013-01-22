@@ -298,7 +298,13 @@ a.whiteLink {
 
 .assignmentAuthor {
 margin-top:3px;
-margin-bottom:3px;
+margin-bottom: 4px;
+}
+
+.assignmentInfo {
+	color: #727f93;
+	margin-bottom: 4px;
+	margin-top: 2px;
 }
 
 .assignmentTags {
@@ -344,7 +350,7 @@ margin-left:0px;
 
 
 /* INPUT TEXT */
-input{  
+input.csp{  
     border: 1px solid silver;  
     padding: 4px;  
     font-size: 1em;  
@@ -352,11 +358,15 @@ input{
 }
 
 div#title_editing_section input, input.titleField{
+    border: 1px solid silver;  
+    padding: 4px;  
+    font-size: 1em;  
+    background-color: #F8F8F8;
 	font-size: 19px;
 	font-weight: bold;
 }
 
-input:focus{  
+input.csp:focus{  
     border-color: #000;  
     background-color: #F5EFE6;  
 }

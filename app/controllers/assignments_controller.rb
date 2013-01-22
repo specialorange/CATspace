@@ -9,14 +9,13 @@ class AssignmentsController < ApplicationController
     if sort == 'latest'
       @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => { :published => true }, :order => 'updated_at DESC'
     elsif sort == 'downloads'
-      # TODO download count not available yet
-      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => { :published => true }, :order => 'UPPER(title) ASC'
+      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => { :published => true }, :order => 'stat_downloads DESC'
     elsif sort == 'rating'
-      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => { :published => true }, :order => 'rating ASC'
+      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => { :published => true }, :order => 'rating DESC'
     elsif sort == 'mostRatings'
-      @sorted_assignments = (Assignment.paginate :page => params[:page], :conditions => { :published => true }).sort {|a,b| b.ratings.length <=> a.ratings.length}
+      @sorted_assignments = (Assignment.paginate :page => params[:page], :conditions => { :published => true }).sort {|a,b| b.ratings.count <=> a.ratings.count}
     elsif sort == 'mostComments'
-      @sorted_assignments = (Assignment.paginate :page => params[:page], :conditions => { :published => true }).sort {|a,b| b.comments.length <=> a.comments.length}
+      @sorted_assignments = (Assignment.paginate :page => params[:page], :conditions => { :published => true }).sort {|a,b| b.comments.count <=> a.comments.count}
     else  
       @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => { :published => true }, :order => 'updated_at DESC'
     end
@@ -26,7 +25,7 @@ class AssignmentsController < ApplicationController
   # List all assignments tagged with the tags specified.
   def tag
     tag_list = params[:id].split('+')
-    @assignments = Assignment.find_tagged_with(tag_list, :match_all => true)
+    @assignments = Assignment.find_tagged_with(tag_list, :conditions => { :published => true }, :match_all => true)
     @tag = tag_list.join(' + ')
   end
 
@@ -42,7 +41,7 @@ class AssignmentsController < ApplicationController
     @is_author = ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
     if @assignment.published or @assignment.facebook_user == @fb_user
       @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}.first(7)
-      @more_assignments_by_author = Assignment.find(:all, :conditions => {:facebook_user_id => @assignment.facebook_user_id, :published => true}, :limit => 5)
+      @more_assignments_by_author = Assignment.find(:all, :conditions => ["facebook_user_id = ? AND published = true AND id != ?", @assignment.facebook_user_id, @assignment.id], :limit => 5)
     
       # TODO: for now it is an approximation of the rating because we are reusing code
       # from the web and it only has images for complete stars and no partial ones.

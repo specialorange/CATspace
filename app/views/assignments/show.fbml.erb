@@ -339,7 +339,7 @@ ul.rating li.five a:hover {background-position:0 -160px}
 <div id="commentForm">
 <%= form_tag :action => "comment" , :id => @assignment%>
 	<%= text_area "comment", "body", :class => "comment_text_area" %> <br>
-	<%= submit_tag "Comment!"%>
+	<%= submit_tag "Comment!", :class => "csp"%>
 </form>
 </div>
 
@@ -387,7 +387,7 @@ ul.rating li.five a:hover {background-position:0 -160px}
 		<% end %>
 	</div>
 	
-	<% if @assignment.queue_flag %>
+	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 		<div class="buttons">
 			<a href=<%=upload_file_url :id => @assignment.id%> class="Positive">+ Add a file</a>
 			<a href=<%=upload_zip_file_url :id => @assignment.id%> class="Positive">+ Upload a ZIP file</a>

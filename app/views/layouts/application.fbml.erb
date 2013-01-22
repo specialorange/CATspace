@@ -4,8 +4,8 @@
 <div id="header">
 	<div id="headerSearchForm">
 		<%=form_tag search_url%>
-		<%=text_field_tag("q")%>
-		<%= submit_tag "Search"%>
+		<%=text_field_tag("q", "", :class => "csp")%>
+		<%= submit_tag "Search", :class => "csp"%>
 		<!-- <span class="buttons"><button type="submit" name="Search">Search</button></span> -->
 		</form>
 	</div>

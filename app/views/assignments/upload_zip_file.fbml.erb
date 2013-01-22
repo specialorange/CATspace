@@ -6,8 +6,8 @@ Please note that the contents of the .zip file will <strong>overwrite the curren
 <br>
 <% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 	<%= form_tag(@upload_url, :multipart => true)%>
-		<input type="file" id="uploaded_file" name="uploaded_file" />
-		<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
-		<%= submit_tag "Upload .ZIP package" %>
+		<input type="file" id="uploaded_file" name="uploaded_file" class="csp"/>
+		<input id="id" class="csp" name="id" value="<%=@assignment.id%>"type="hidden" />
+		<%= submit_tag "Upload .ZIP package", :class => "csp"%>
 	</form>
 <% end %>

@@ -26,12 +26,11 @@ class HomeController < ApplicationController
 
     if sort == 'recoms'
       # TODO What are we going to do for recommendations
-      sorted_assignments = Assignment.find(:all, :conditions => ["facebook_user_id != ?", @fb_user.id ], :order => "created_at DESC", :limit => 5)
+      sorted_assignments = Assignment.find(:all, :conditions => ["published = true and facebook_user_id != ?", @fb_user.id ], :order => "created_at DESC", :limit => 5)
     elsif sort == 'rated'
-      sorted_assignments = user.assignments.sort {|a,b| a.rating <=> b.rating}
+      sorted_assignments = Assignment.find(:all, :conditions => ["published = true and facebook_user_id != ?", @fb_user.id ], :order => 'rating DESC')
     elsif sort == 'downloads'
-      # TODO Need to add a downloaded count to the assignment table?
-      sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
+      sorted_assignments = Assignment.find(:all, :conditions => [ "published = true and facebook_user_id != ?", @fb_user.id ], :order => 'stat_downloads DESC', :limit => 5)
     else
       sorted_assignments = user.assignments
     end
