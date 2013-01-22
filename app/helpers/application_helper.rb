@@ -32,6 +32,7 @@ module ApplicationHelper
   def ajax_on?
    session[:ajaxy]
   end
+  
 
   CreateAssignmentString = "created assignment "
   UpdateAssignmentString = "updated assignment "

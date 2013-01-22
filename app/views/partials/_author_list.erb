@@ -1,0 +1,13 @@
+<% if !assignment.authorships.blank? %>
+  <% for authorship in assignment.authorships %> 
+	&nbsp;&nbsp;
+	<% if authorship.facebook_user %>
+		<a href="<%=profile_url(:id => authorship.facebook_user.id)%>">
+			<%= fb_name(authorship.facebook_user_uid, options={:linked => false, :useyou => false})%>
+		</a>
+	<%else%>
+			<%= fb_name(authorship.facebook_user_uid, options={:linked => true, :useyou => false})%>
+	<%end%>
+  <% end %>
+<% end %>
+

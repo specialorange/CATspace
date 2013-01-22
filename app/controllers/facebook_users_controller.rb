@@ -28,18 +28,18 @@ class FacebookUsersController < ApplicationController
     user = FacebookUser.find(params[:user])
     sort = params[:sort]
     if sort == 'title'
-      sorted_assignments = user.assignments.sort {|a,b| a.title <=> b.title}
+      sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
     elsif sort == 'date'
       sorted_assignments = user.assignments.sort {|a,b| b.created_at <=> a.created_at}
     elsif sort == 'rating'
       sorted_assignments = user.assignments.sort {|a,b| a.rating <=> b.rating}
     elsif sort == 'comments'
-      sorted_assignments = user.assignments.sort {|a,b| a.title <=> b.title}
+      sorted_assignments = user.assignments.sort {|a,b| a.title.upcase <=> b.title.upcase}
     else
       sorted_assignments = user.assignments
     end
     # user = facebook_session.user
-    render :partial => "ajaxy_list", :locals => {:user => user, :assignments => sorted_assignments}, :layout => false
+    render :partial => "ajaxy_list", :locals => {:user => user, :assignments => sorted_assignments, :sort => sort}, :layout => false
     #render :partial => "ajaxy_list", :layout => false    
   end  
   

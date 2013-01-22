@@ -1,13 +1,13 @@
 <% for user in users %>
 <div class="peopleListItem">
-	<div class="peopleListItemThumb">
-		<%= fb_profile_pic(user.uid, options={:linked => false}) %>
-	</div>
-	<div class="peopleListItemDetails">
-		<a href="<%=url_for(:controller=>"facebook_users", :action=>"profile", :id=>user.id)%>"><%= fb_name(user.uid, options={:linked => false, :useyou => false}) %></a>
-		<div id="userProfileInfo">
-			Virginia Tech
-		</div>
-	</div>
+        <div class="peopleListItemThumb">
+                <%= fb_profile_pic(user.uid, options={:linked => false}) %>
+        </div>
+        <div class="peopleListItemDetails">
+                <a href="<%=url_for(:controller=>"facebook_users", :action=>"profile", :id=>user.id)%>"><%= fb_name(user.uid, options={:linked => false, :useyou => false}) %></a>
+                <div id="userProfileInfo">
+                        Virginia Tech
+                </div>
+        </div>
 </div>
 <%end%>

@@ -6,6 +6,8 @@ class FacebookUser < ActiveRecord::Base
   has_many :comments
   has_many :activity_items
   
+  acts_as_taggable
+  
   # def target_footprints
   #   footprints
   # end

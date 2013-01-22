@@ -6,6 +6,8 @@
 		<a href="<%=profile_url(:id => assignment.facebook_user.id)%>">
 		<%= fb_name(assignment.facebook_user.uid, options={:linked => false, :useyou => false})%>
 		</a>
+		<%= render :partial =>"partials/author_list", :locals => {:assignment => assignment} %>
+		
 	</div>
 	<div class="assignmentTags">
 		<%= render :partial => "assignments/linked_tag_list", :locals => { :list => assignment.tag_list } %>

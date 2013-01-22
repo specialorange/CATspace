@@ -1,0 +1,32 @@
+<div id="sort_by_buttons">
+	<p align="right">
+		Sort by:
+	  <% if sort == 'date' %>
+			<span class="grayButtonPressed"><%= link_to_remote "Date", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=date')" %></span>
+		<% else %>
+			<span class="grayButton"><%= link_to_remote "Date", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=date')" %></span>	
+		<% end %>
+  
+		<% if sort == 'title' %>
+			<span class="grayButtonPressed"><%= link_to_remote "Name", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=title')" %></span>	
+		<% else %>
+			<span class="grayButton"><%= link_to_remote "Name", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=title')" %></span>	
+		<% end %>
+
+	  <% if sort == 'rating' %>
+			<span class="grayButtonPressed"><%= link_to_remote "Rating", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=rating')" %></span>	
+		<% else %>
+			<span class="grayButton"><%= link_to_remote "Rating", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=rating')" %></span>	
+		<% end %>
+	
+	  <% if sort == 'comments' %>
+			<span class="grayButtonPressed"><%= link_to_remote "Comments", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=comments')" %></span>	
+		<% else %>
+			<span class="grayButton"><%= link_to_remote "Comments", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=comments')" %></span>	
+		<% end %>
+	</p>
+</div>
+
+<% for assignment in assignments %>
+	<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
+<% end %>

@@ -1,0 +1,26 @@
+<h1><%= link_to @assignment.title, @assignment%></h1>
+<br>
+<h2>Authors:</h2>
+
+<% if !@authors.blank? %>
+	<ul>
+	<li><%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %> </li>
+	<% for author in @authors %>
+		<li> 
+			<%= fb_name(author.facebook_user_uid, :firstnameonly => false, :useyou => false, :capitalize => true) %> 
+			(<%= link_to "Remove", remove_author_url(:id => @assignment.id, :uid => author.facebook_user_uid)%>)
+		</li>
+	<% end %>
+	</ul>
+<% else %>
+	There are no additional authors for this assignment.
+<% end %>
+
+<br>
+
+<h2>Add Authors</h2>
+<%= form_tag add_authors_url(:id => @assignment.id)%>
+<%= fb_multi_friend_input(:condensed => true)%>
+<%= submit_tag "Add these people as authors"%>
+
+</form>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  facebook_user_id: 1
+  assignment_id: 1
+  role: 1
+
+two:
+  facebook_user_id: 1
+  assignment_id: 1
+  role: 1

@@ -1,3 +1,4 @@
+<%= fb_title @assignment.title%>
 <%= render :partial =>"partials/activity_item_ajax_js_include" %>
 <script type="text/javascript" charset="utf-8">
 function doAjaxInPlaceEdit(field) {
@@ -34,7 +35,7 @@ function confirmFlick(action, URL) {
 }
 	
 </script>
-<% if @assignment.facebook_user.id == @fb_user.id %>
+<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 <div class="assignmentHeader">  
 	<div class="assignmentTitle">
 		<div id="title_field" onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('title');">
@@ -52,7 +53,11 @@ function confirmFlick(action, URL) {
 		<i>Saving...</i>
 	</div>
 	<div style="clear:both; padding-left:3px">
-		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %>
+		<%= fb_name(@assignment.facebook_user.uid, :firstnameonly => false, :useyou => false, :capitalize => true) %> 
+		<%= render :partial =>"partials/author_list", :locals => {:assignment => @assignment} %>
+		<% if @assignment.facebook_user.id == @fb_user.id %>
+			(<%= link_to "Edit Authors", authors_url(:id=> @assignment.id) %>)
+		<% end %>
 	</div>
 </div>
 <% else %>
@@ -99,7 +104,7 @@ function confirmFlick(action, URL) {
 		<%= submit_tag "Rate!"%>
 		</form>
 	</p> -->
-	<% if @assignment.facebook_user.id == @fb_user.id %>
+	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 	<p style="clear:both;">
   		<div id="synopsis_field"  onMouseOver="flashObj(this);" onMouseOut="unFlashObj(this);" onClick="doAjaxInPlaceEdit('synopsis');"><%= @assignment.synopsis %></div>
 		<div id="synopsis_editing_section" style="display:none;">
@@ -140,7 +145,7 @@ function confirmFlick(action, URL) {
 
 <div id="rightPanel">
 	<div class="buttons">
-		<% if @assignment.facebook_user.id == @fb_user.id %>
+	<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 					<% if @assignment.published == false %>
 						<a class="positive" href="#" onClick="confirmFlick('publish', '<%=url_for :action => "flick_switch", :id => @assignment.id%>')">Publish Assignment</a>
 					<% else %>
@@ -149,7 +154,9 @@ function confirmFlick(action, URL) {
 				</form>
 			<br>
 		<% end %>
-		<a>Download Assignment</a>
+		<% if @assignment.queue_flag and @assignment.published %>
+			<%= link_to "Download Assignment", @download_url+@assignment.id.to_s%>
+		<% end %>
 	</div>
 	<p> </p>
 	<div class="boxHeaderFlexible">Files</div>
@@ -164,7 +171,7 @@ function confirmFlick(action, URL) {
 			</ul>
 		<% else %>
 			No files uploaded.
-			<% if @assignment.facebook_user.id == @fb_user.id %>
+			<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
 				<%= form_tag(@upload_url, :multipart => true)%>
 					<input type="file" id="uploaded_file" name="uploaded_file" />
 					<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />

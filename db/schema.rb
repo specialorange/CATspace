@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090208070430) do
+ActiveRecord::Schema.define(:version => 20090328062157) do
 
   create_table "activity_items", :force => true do |t|
     t.integer  "facebook_user_id", :null => false
@@ -29,6 +29,15 @@ ActiveRecord::Schema.define(:version => 20090208070430) do
     t.boolean  "pref_comment_notify", :default => false
     t.string   "attachment_name"
     t.boolean  "queue_flag",          :default => false
+    t.boolean  "published",           :default => false
+  end
+
+  create_table "authorships", :force => true do |t|
+    t.integer  "facebook_user_uid",                :null => false
+    t.integer  "assignment_id",                    :null => false
+    t.integer  "role",              :default => 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "comments", :force => true do |t|
@@ -47,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20090208070430) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "pref_comment_notify",              :default => false
+    t.string   "affiliation"
   end
 
   add_index "facebook_users", ["uid"], :name => "index_facebook_users_on_uid", :unique => true

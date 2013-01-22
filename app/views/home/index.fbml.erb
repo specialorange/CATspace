@@ -1,3 +1,4 @@
+<%= fb_title "Home"%>
 <%= render :partial =>"partials/activity_item_ajax_js_include" %>
 <div id="contentPanel">
 <div class="boxHeaderFlexible">Recent Activity</div>
@@ -28,7 +29,7 @@
 	CatSpace lets you share assignments with other CS instructors to get feedback and help you improve. Click on the following video for a quick demo: (Video coming soon!)
 	<p> </p>
 	<div class="boxHeaderFlexible">Tags of Interest</div>
-	<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
+	<% tag_cloud @assignmentTags, %w(css1 css2 css3 css4) do |tag, css_class| %>
     	<%= link_to tag.name, { :controller=>"assignments", :action => :tag, :id => tag.name }, :class => css_class %>
 	<% end %>
 	<p> </p>

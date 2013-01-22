@@ -9,9 +9,22 @@ class Assignment < ActiveRecord::Base
   
   belongs_to :facebook_user, :foreign_key => :facebook_user_id, :class_name => "FacebookUser"
   has_many :comments
-  has_many :activity_items  
+  has_many :activity_items 
+  has_many :authorships 
 
   validates_presence_of :title, :on => :create, :message => "can't be blank"
+  
+  #Test for author
+  def is_author?(user)
+    for authorship in self.authorships
+      if user.uid == authorship.facebook_user_uid
+        return true
+      end
+    end
+    false
+  end
+  
+  
   
   def attach_file(uploaded_file, i=1)
     # TODO: Destroy anything if its already there. We're assuming that controller has taken care of verifications.
@@ -35,12 +48,10 @@ class Assignment < ActiveRecord::Base
   end
 
   def path_to_attachment(filename = self.attachment_name)
-    #TODO: These should rather be picked from some config variable
     FileSystem.PathToAttachment + filename
   end
   
   def path_to_folder
-    #TODO: These should rather be picked from some config variable
     FileSystem.PathToFolder + self.id.to_s + "/"
   end
 

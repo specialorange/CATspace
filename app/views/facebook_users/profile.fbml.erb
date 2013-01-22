@@ -1,3 +1,9 @@
+<%if @self%>
+<%= fb_title "My Profile"%>
+<%else%>
+<%= fb_title "Profile"%>
+<%end%>
+
 <%= render :partial =>"partials/activity_item_ajax_js_include" %>
 <script language="JavaScript" type="text/javascript"> 
 
@@ -5,7 +11,7 @@ function submitAssignmentAjax(vars) {
   url = '<%= url_for(:action => "list_assignments", :canvas => false, :only_path => false,
   request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
 //ajax.post('http://bashful.cs.vt.edu:3000/facebook_users/list_assignments/'+<%=@fb_user.uid%>);
-  ajaxCall( vars , url,'assignment_list'); 
+  ajaxCall( vars, url,'assignment_list'); 
   return false;
 }
 // Unobtrusively add sumbit ajax to the form
@@ -34,20 +40,10 @@ document.getElementById('ajax_button').addEventListener('click',submitAjax);
 	<div class="boxHeaderFlexible">
 		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Assignments
 	</div>
-	<p align="right">
-	Sort by:
-	<span class="grayButtonPressed"><%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=date')" %></span>
-	<span class="grayButton"><%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=title')" %></span>
-	<span class="grayButton"><%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=rating')" %></span>
-	<span class="grayButton"><%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=comments')" %></span>
-	</p>
 	<div id="assignment_list">
-		<% for assignment in @user.assignments %>
-			<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
-		<%end%>
-		<!-- <%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @user.assignments}, :layout => false %> -->
+		<%= render :partial => "ajaxy_list", :locals => {:user => @user, :assignments => @user.assignments, :sort => 'date'}, :layout => false %>
 	</div>
-
+	
 	<br>
 	
 </div>

@@ -24,6 +24,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}
     @upload_url = ActionController::Base.asset_host + "/assignments/upload/";
+    @download_url = ActionController::Base.asset_host + "/assignments/download/";
   end
 
   # GET /assignments/new
@@ -146,5 +147,56 @@ class AssignmentsController < ApplicationController
         redirect_to(@assignment)
       end
   end
+  
+  def authors
+    @assignment = Assignment.find(params[:id])
+    @authors = @assignment.authorships(:select => "facebook_users_uid")
+    if @assignment.facebook_user.id != @fb_user.id
+      flash[:alert] = "You need to be the owner of the assignment to edit authors."
+      redirect_to @assignment
+    end
+  end
+  
+  def add_authors
+    user_ids = params[:ids]
+    assignment = Assignment.find(params[:id])
+  
+    if assignment.facebook_user.id == @fb_user.id
+      for uid in user_ids
+        assignment.authorships.create(:facebook_user_uid => uid, :role => 1)
+      end
+      flash[:notice] = "Successfully added authors."
+    else 
+      flash[:alert] = "You need to be the owner of the assignment to add authors."
+    end
     
+    redirect_to :controller => "assignments", :action => "authors", :id => params[:id]
+  end
+  
+  def remove_author
+    assignment = Assignment.find(params[:id])
+    authorship = assignment.authorships.find(:first, :conditions => {:facebook_user_uid => params[:uid]})
+  
+    if assignment.facebook_user.id == @fb_user.id
+      authorship.destroy
+      flash[:notice] = "Successfully removed author."
+    else 
+      flash[:alert] = "You need to be the owner of the assignment to remove authors."
+    end
+    
+    redirect_to :controller => "assignments", :action => "authors", :id => params[:id]
+  end
+  
+  def download
+    assignment = Assignment.find(params[:id])
+    
+    if assignment.published
+      send_file assignment.path_to_attachment, :type => "application/zip"      
+    else
+      flash[:alert] = "The Assignment is not published yet."
+      redirect_to "http://apps.facebook.com/"+ENV['FACEBOOKER_RELATIVE_URL_ROOT']+"/assignments/#{assignment.id}"
+    end
+
+  end
+  
 end

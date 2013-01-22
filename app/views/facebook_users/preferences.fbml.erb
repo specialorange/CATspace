@@ -1,6 +1,10 @@
+<%= fb_title "Preferences"%>
+
 <div class="boxHeaderFlexible">Preferences</div>
 <% form_for @fb_user, :url => { :action => "prefsave" } do |f| %>
     <%= f.error_messages %>
 <%= f.check_box :pref_comment_notify %> Notify me when people comment on my assignments.<br />
+ <%= label_tag "Tag subscriptions: "%> 
+   <%= f.text_field :tag_list %> <br />
 <input type="submit" value="Submit" />
 <% end %>
