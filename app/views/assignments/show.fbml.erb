@@ -155,21 +155,31 @@ function confirmFlick(action, URL) {
 	<div class="boxHeaderFlexible">Files</div>
 	<div >
 		<% if @assignment.queue_flag %>
-			<ul>
+			<ul class="fileList">
 				<% for file in @assignment.files %>
-					<li><%=file%></li>
+					<%if file.include?"." %>
+						<li><%=file%></li>
+					<%end%>
 				<% end %>
 			</ul>
 		<% else %>
 			No files uploaded.
-			<%= form_tag(@upload_url, :multipart => true)%>
-				<input type="file" id="uploaded_file" name="uploaded_file" />
-				<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
-				<%= submit_tag "Upload" %>
-			</form>
+			<% if @assignment.facebook_user.id == @fb_user.id %>
+				<%= form_tag(@upload_url, :multipart => true)%>
+					<input type="file" id="uploaded_file" name="uploaded_file" />
+					<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
+					<%= submit_tag "Upload" %>
+				</form>
+			<% end %>
 		<% end %>
 	</div>
-
+	
+	<% if @assignment.queue_flag %>
+		<div class="buttons">
+			<a href="" class="Positive">+ Add a file</a>
+		</div>
+	<% end %>
+	<p> </p>
 	<div class="boxHeaderFlexible">Recent activity</div>
 	<%if @activity_items%>
 		<% for activity_item in @activity_items %>

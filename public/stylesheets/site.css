@@ -353,6 +353,7 @@ textarea:focus {
 
 .peopleListItem {
 	padding-bottom: 10px;
+height:65px;
 }
 
 .peopleListItemThumb {
@@ -433,6 +434,19 @@ ul.paramList {
 }
 
 ul.paramList li {
+    border-bottom:1px solid #DFDFDF;	
+}
+
+ul.fileList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	color: #3b5898;
+	line-height: 1.8;
+}
+
+ul.fileList li {
     border-bottom:1px solid #DFDFDF;	
 }
 
