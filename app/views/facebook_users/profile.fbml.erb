@@ -18,6 +18,7 @@ document.getElementById('ajax_button').addEventListener('click',submitAjax);
 			<td width="90%" valign="top">
 				<h1><%= fb_name(@user.uid, options={:linked => false, :useyou => false}) %></h1>
 				<div id="userProfileInfo">
+					Virginia Tech<br>
 					<%= @user.assignments.count %> Assignments on CATspace.
 				</div>
 			</td>		
@@ -29,17 +30,17 @@ document.getElementById('ajax_button').addEventListener('click',submitAjax);
 	<% for activity_item in @activity_items %>
 		<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
 	<% end %>
-
+	<p> </p>
 	<div class="boxHeaderFlexible">
 		<%= fb_name(@user.uid, :capitalize => true, :firstnameonly => true, :useyou => true, :possessive => true, :linked => false) %> Assignments
 	</div>
-
+	<p align="right">
 	Sort by:
-	<%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=date')" %> | 
-	<%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=title')" %> | 
-	<%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=rating')" %> | 
-	<%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=comments')" %>
-
+	<span class="grayButtonPressed"><%= link_to "Date", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=date')" %></span>
+	<span class="grayButton"><%= link_to "Name", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=title')" %></span>
+	<span class="grayButton"><%= link_to "Rating", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=rating')" %></span>
+	<span class="grayButton"><%= link_to "Comments", "#", :onclick => "submitAssignmentAjax('user=#{@user.id}&sort=comments')" %></span>
+	</p>
 	<div id="assignment_list">
 		<% for assignment in @user.assignments %>
 			<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>

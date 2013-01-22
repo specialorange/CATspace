@@ -22,4 +22,8 @@ task :after_update_code do
   %w{database.yml environment.rb facebooker.yml}.each do |config|
     run "ln -nfs #{shared_path}/config/#{config} #{release_path}/config/#{config}"
   end
+  %w{filesystem.rb}.each do |config|
+    run "ln -nfs #{shared_path}/config/initializers/#{config} #{release_path}/config/initializers/#{config}"
+  end
+  
 end

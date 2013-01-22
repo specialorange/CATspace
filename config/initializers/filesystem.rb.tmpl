@@ -1,0 +1,10 @@
+require "ostruct"  
+
+# Configuration for data files. This file needs to be maintained independently in each distribution.
+# Hence, only the .tmpl file is present in the SVN.
+# The paths specified here SHOULD EXIST, Or else your app server will die a miserable death when it's asked
+# for files.  
+FileSystem = OpenStruct.new({  
+  :PathToAttachment => "/Users/Sameer/Documents/CSPFiles/Zips/",  
+  :PathToFolder => "/Users/Sameer/Documents/CSPFiles/Folders/",  
+})

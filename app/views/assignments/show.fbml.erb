@@ -151,7 +151,7 @@ function confirmFlick(action, URL) {
 		<% end %>
 		<a>Download Assignment</a>
 	</div>
-
+	<p> </p>
 	<div class="boxHeaderFlexible">Files</div>
 	<div >
 		<% if @assignment.queue_flag %>
@@ -178,7 +178,7 @@ function confirmFlick(action, URL) {
 	<%else%>
 		There is no recent activity on this assignment.
 	<% end %>
-
+	<p> </p>
 	<div class="boxHeaderFlexible">More by <%= fb_name(@assignment.facebook_user.uid, options={:firstnameonly => false, :linked => false, :useyou => true})%></div>
 	<div style="height:200px"></div>
 	

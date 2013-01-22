@@ -9,7 +9,7 @@
 		    <%= f.text_field :title, :required => true, :class => "titleField", :size => "46" %>
 		  </p>
 		  <p>
-		    <%= f.label :synopsis %><br />
+		    <%= label_tag "Description"%><br />
 		    <%= f.text_area :synopsis, :class => "synopsisField" ,:rows => "10", :cols => "50"%>
 		  </p>
 		  <p>
@@ -17,7 +17,7 @@
 		    <%= f.text_field :tag_list %>
 		  </p>
 		  <p>
-		    <%= label_tag "Assignment Files"%><br />
+		    <%= label_tag "Assignment .zip file (You can upload this later)"%><br />
 			<input type="file" id="uploaded_file" name="uploaded_file" />
 		  </p>
 	

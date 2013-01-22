@@ -1,10 +1,37 @@
 <%= render :partial =>"partials/activity_item_ajax_js_include" %>
 <div id="contentPanel">
 <div class="boxHeaderFlexible">Recent Activity</div>
-
-<% for activity_item in @activity_items %>
-<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
-<% end %>
-
+	<% for activity_item in @activity_items %>
+		<%= render :partial =>"partials/activity_item", :locals => {:activity_item => activity_item} %>
+	<% end %>
+	<br>
+	<br>
+	<span class="grayButtonPressed">
+		<a href="#">Recommended for you</a>
+	</span>
+	<span class="grayButton">
+		<a href="#">Top Rated</a>
+	</span>
+	<span class="grayButton">
+		<a href="#">Top Downloads</a>
+	</span>
+	<br>
+	<br>
+	<div id="assignment_list">
+		<% for assignment in @recommended_assignments %>
+			<%= render :partial =>"partials/assignment_display", :locals => {:assignment => assignment} %>
+		<%end%>
+	</div>
 </div>
-<div id="rightPanel">Hello</div>
+<div id="rightPanel">
+	<div class="boxHeaderFlexible">What is CATspace?</div>
+	CatSpace lets you share assignments with other CS instructors to get feedback and help you improve. Click on the following video for a quick demo: (Video coming soon!)
+	<p> </p>
+	<div class="boxHeaderFlexible">Tags of Interest</div>
+	<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
+    	<%= link_to tag.name, { :controller=>"assignments", :action => :tag, :id => tag.name }, :class => css_class %>
+	<% end %>
+	<p> </p>
+	<div class="boxHeaderFlexible">People Like You</div>
+		<%= render :partial =>"partials/people_sidebar_list", :locals => {:users => @users_like_you} %>
+</div>

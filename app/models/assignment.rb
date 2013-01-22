@@ -36,12 +36,12 @@ class Assignment < ActiveRecord::Base
 
   def path_to_attachment(filename = self.attachment_name)
     #TODO: These should rather be picked from some config variable
-    RAILS_ROOT + "/data/zips/" + filename
+    FileSystem.PathToAttachment + filename
   end
   
   def path_to_folder
     #TODO: These should rather be picked from some config variable
-    RAILS_ROOT + "/data/folders/" + self.id.to_s + "/"
+    FileSystem.PathToFolder + self.id.to_s + "/"
   end
 
   def rename(new_name, old_path=self.path_to_attachment)
