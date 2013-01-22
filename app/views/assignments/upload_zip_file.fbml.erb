@@ -1,0 +1,13 @@
+<h1><%= link_to @assignment.title, @assignment%></h1>
+<br>
+<h2>Upload a .ZIP file</h2>
+Please note that the contents of the .zip file will <strong>overwrite the current files</strong> of the assignment. This action cannot be undone, so we recommend downloading the current version of the assignment for backup.
+<br>
+<br>
+<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
+	<%= form_tag(@upload_url, :multipart => true)%>
+		<input type="file" id="uploaded_file" name="uploaded_file" />
+		<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
+		<%= submit_tag "Upload .ZIP package" %>
+	</form>
+<% end %>

@@ -53,7 +53,7 @@ function submitAssignmentAjax(vars) {
 	
 	<% if @self%>
 		<div class="buttons" style="clear:none;">
-			<%=link_to "Create Assignment", {:controller=>"assignments", :action => "new"}, :class =>"positive"%>
+			<%=link_to "Create Assignment", accept_copyrights_url, :class =>"positive"%>
 			<br />
 			<%= link_to "Preferences", :action=>"preferences" %>
 		</div>

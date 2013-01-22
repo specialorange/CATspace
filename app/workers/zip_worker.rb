@@ -21,6 +21,23 @@ class ZipWorker < Workling::Base
        zf.each { |e| 
          fpath = File.join(target, e.name) 
          FileUtils.mkdir_p(File.dirname(fpath))
+         
+         logger.debug { "[DEBUG] Now unzipping: " + File.join(target, e.name)}
+         
+         if (File.exists? File.join(target, e.name)) and not (File.directory? File.join(target, e.name))
+           logger.debug { "[DEBUG] Removing file: " + File.join(target, e.name)}
+           FileUtils.rm_rf File.join(target, e.name)
+         end
+         
+         ## RANT begin
+         # Since this method is not overwriting files, and its API documentation is a one-line joke, 
+         # I have to check for the file and remove it manually above.
+         # Seriously, guys, I love open source, but you're not 7 year olds just starting to learn programming. 
+         # It takes < 1 minute to document your freaking API. 
+         # That 4 year old Kylie from Microsoft's ads could do a better job at
+         # documenting than the authors of some of the Ruby projects out there.
+         # - SA
+         ## RANT end
          zf.extract(e, fpath) 
        } 
     }

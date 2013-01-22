@@ -56,10 +56,10 @@ function confirmFlick(action, URL) {
 		}
 }
 
-function deleteAssignmentFile(id, path) {
+function deleteAssignmentFile(id, path, ctr) {
   url = '<%= url_for(:controller => "assignments", :action => "remove_file", :canvas => false, :only_path => false, 
   request_forgery_protection_token.to_s => h(form_authenticity_token()) ) %>';
-  ajaxDeleteFile( id , url,'fileList_'+id, path);
+  ajaxDeleteFile( id , url,'fileList_'+ctr, path);
 }
 
 function requestTagUpdate(vars) {
@@ -365,36 +365,32 @@ ul.rating li.five a:hover {background-position:0 -160px}
 	<div >
 		<% if @assignment.queue_flag %>
 			<ul class="fileList">
+				<% i = 0%>
 				<% for file in @assignment.files %>
 					<%if file.include?"." %>
-						<li id="fileList_<%=file%>">
-						<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
-							<%=link_to file, edit_file_path(:id => @assignment.id, :path => file)%>
-						<% else %>
-							<%=link_to file, read_file_path(:id => @assignment.id, :path => file)%>
-						<% end %>
-						<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
-							(<%= link_to "X", "#", :onclick => "deleteAssignmentFile(#{@assignment.id}, '#{file})'" %>)
-						<% end %>
+						<li id="fileList_<%=i%>">
+							<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
+								<%=link_to file, edit_file_path(:id => @assignment.id, :path => file)%>
+							<% else %>
+								<%=link_to file, read_file_path(:id => @assignment.id, :path => file)%>
+							<% end %>
+							<% if (((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))) and (file != 'assignment.properties') %>
+								(<%= link_to "X", "#", :onclick => "deleteAssignmentFile(#{@assignment.id}, '#{file}', '#{i}')" %>)
+							<% end %>
 						</li>
+					<% i = i + 1%>
 					<%end%>
 				<% end %>
 			</ul>
 		<% else %>
 			No files uploaded.
-			<% if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user)) %>
-				<%= form_tag(@upload_url, :multipart => true)%>
-					<input type="file" id="uploaded_file" name="uploaded_file" />
-					<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
-					<%= submit_tag "Upload" %>
-				</form>
-			<% end %>
 		<% end %>
 	</div>
 	
 	<% if @assignment.queue_flag %>
 		<div class="buttons">
-			<a href="" class="Positive">+ Add a file</a>
+			<a href=<%=upload_file_url :id => @assignment.id%> class="Positive">+ Add a file</a>
+			<a href=<%=upload_zip_file_url :id => @assignment.id%> class="Positive">+ Upload a ZIP file</a>
 		</div>
 	<% end %>
 	<p> </p>

@@ -37,13 +37,14 @@ class Assignment < ActiveRecord::Base
     # end
     # TODO: validate for file type.
     @uploaded_file = uploaded_file
-    fn=self.attachment_name=sanitize_filename(@uploaded_file.original_filename)
-    #  self.filename=fn+(i+=1).to_s while File.exists? (self.path_to_file)
-    self.attachment_name = self.attachment_name.sub(/^(.*?)(\.[^\.]+)?$/,'\1'+"#{i+=1}"+'\2') while File.exists? (self.path_to_attachment)
     
-    #TODO: Need a check here
-    self.save
-    
+    # If for some reason the attachment name isn't already defined (Shouldn't happen, its defined as <ID>.zip)
+    if (!self.attachment_name)
+      self.attachment_name =sanitize_filename(@uploaded_file.original_filename)
+      self.attachment_name = self.attachment_name.sub(/^(.*?)(\.[^\.]+)?$/,'\1'+"#{i+=1}"+'\2') while File.exists? (self.path_to_attachment)
+      self.save
+    end
+        
     # if it's large enough to be a real file
     return FileUtils.copy( @uploaded_file.local_path, self.path_to_attachment) if @uploaded_file.instance_of?(Tempfile)
     # else
@@ -94,12 +95,26 @@ class Assignment < ActiveRecord::Base
     FileUtils.rm_rf self.path_to_attachment
   end
 
+  # The path parameter is the relative path for the file within the assignment package.
+  # It should not be prefixed with a "/". It should be suffixed with a "/". Eg: 
+  # "sources/simpsons/doh/"
+  def add_file(uploaded_file, path)
+    filename = sanitize_filename(uploaded_file.original_filename)
+    
+    if (path and path != '')
+      FileUtils.mkdir_p( self.path_to_folder + path)
+    end
+    
+    # if it's large enough to be a real file
+    return FileUtils.copy(uploaded_file.local_path, self.path_to_folder + path + filename) if uploaded_file.instance_of?(Tempfile)
+    # else
+    File.open(self.path_to_folder + path + filename, "w") { |f| f.write(uploaded_file.read) }
+  end
+  
   
   def remove_file(path)
-    if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
-      file = File.join(self.path_to_folder, path)
-      FileUtils.rm_rf file
-    end
+    file = File.join(self.path_to_folder, path)
+    return FileUtils.rm_rf file
   end
   
   def read_file(path)
@@ -188,7 +203,14 @@ class Assignment < ActiveRecord::Base
 
   def write_properties_file
     if self.path_to_folder
-      file = File.join(self.path_to_folder, "assignment.properties")
+
+        # Create folder if it doesn't exist
+        FileUtils.mkdir_p self.path_to_folder
+        
+        file = File.join(self.path_to_folder, "assignment.properties")
+        
+        # Touch file to make sure it exists
+        FileUtils.touch file
 
         properties = JavaProperties::Properties.new(file)
         

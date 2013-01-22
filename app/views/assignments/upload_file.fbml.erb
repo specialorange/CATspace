@@ -1,0 +1,24 @@
+<h1><%= link_to @assignment.title, @assignment%></h1>
+<br>
+<h2>Add a file</h2><br>
+<%= form_tag(@add_file_url, :multipart => true)%>
+	<input id="id" name="id" value="<%=@assignment.id%>"type="hidden" />
+<h2>Choose file:</h2>
+	<input type="file" id="uploaded_file" name="uploaded_file" />
+<br><br>
+<h2>Select the folder to place the file in (Or enter a new folder, it will be created for you):</h2>
+If no value is entered, file would be saved in the root folder of the assignment.
+<br>
+<br>
+<ul class="fileList">
+	<% for file in @assignment.files.select{|file| !file.include?"."} %>
+	<li>
+		<a href="#" onClick="document.getElementById('path_input').setValue('<%=file+"/"%>');"><%=file%>/</a>
+	</li>
+	<% end %>
+</ul>
+
+	<%= text_field_tag 'path', "", :id => "path_input", :size => 30%>
+	<br><br>
+	<%= submit_tag "Add File" %>
+</form>

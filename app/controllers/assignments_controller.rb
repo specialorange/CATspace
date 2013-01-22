@@ -42,8 +42,6 @@ class AssignmentsController < ApplicationController
     @is_author = ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
     if @assignment.published or @assignment.facebook_user == @fb_user
       @activity_items = @assignment.activity_items.sort{|a,b| b.created_at <=> a.created_at}.first(7)
-      @upload_url = ActionController::Base.asset_host + "/assignments/upload/";
-
       @more_assignments_by_author = Assignment.find(:all, :conditions => {:facebook_user_id => @assignment.facebook_user_id, :published => true}, :limit => 5)
     
       # TODO: for now it is an approximation of the rating because we are reusing code
@@ -132,6 +130,14 @@ class AssignmentsController < ApplicationController
     @assignment.published = false
       if @assignment.save
         flash[:notice] = 'Assignment was successfully created.'
+        
+        # Initial Setup
+        @assignment.attachment_name = @assignment.id.to_s + ".zip"
+        @assignment.write_properties_file
+        @assignment.update_attribute(:queue_flag, true)
+        @assignment.save
+        ZipWorker.asynch_zip_file(:id => @assignment.id, :target => @assignment.path_to_attachment, :source => @assignment.path_to_folder)        
+        
         redirect_to(@assignment)
       else
         render :action => "new"
@@ -215,14 +221,61 @@ class AssignmentsController < ApplicationController
     ZipWorker.asynch_unzip_file(:id => @assignment.id, :source => @assignment.path_to_attachment, :target => @assignment.path_to_folder)
     #TODO: This should not be set like this. It should instead be based on feedback from the background job.
     @assignment.update_attribute(:queue_flag, true)
+    redirect_to "http://apps.facebook.com/"+ENV['FACEBOOKER_RELATIVE_URL_ROOT']+"/assignments/#{@assignment.id}"        
+  end
+  
+  #This is the controller for 'add file' page
+  def upload_file
+    @assignment = Assignment.find(params[:id])
+    if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
+      @add_file_url = ActionController::Base.asset_host + "/assignments/add_file/"
+    else
+        flash[:alert] = "You do not have permissions to add a file to that assignment."
+        redirect_to @assignment
+      end
+      
+  end
+
+  #This is the controller for 'upload zip file' page
+  def upload_zip_file
+    @assignment = Assignment.find(params[:id])
+    if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
+      @upload_url = ActionController::Base.asset_host + "/assignments/upload/" 
+    else
+      flash[:alert] = "You do not have permissions to upload a zip file to that assignment."
+      redirect_to @assignment
+    end
+  end
+  
+  
+  def add_file
+    
+    if (!params[:id])
+      flash[:alert] = "Could not find assignment. Please try again."
+      return redirect_to "http://apps.facebook.com/"+ENV['FACEBOOKER_RELATIVE_URL_ROOT']+"/assignments/"
+    end
+
+    @assignment = Assignment.find(params[:id])
+    
+    if (!params[:uploaded_file] or params[:uploaded_file] == "")
+      flash[:alert] = "Please select a file to add."
+       return redirect_to "http://apps.facebook.com/"+ENV['FACEBOOKER_RELATIVE_URL_ROOT']+"/assignments/upload_file/#{@assignment.id}"
+    end
+
+    logger.debug "[DEBUG] Got request to add file. ID is " + params[:id] + " filename is " + params[:uploaded_file].original_filename
+    @assignment.add_file(params[:uploaded_file], params[:path])
+    ZipWorker.asynch_zip_file(:id => @assignment.id, :target => @assignment.path_to_attachment, :source => @assignment.path_to_folder)
     redirect_to "http://apps.facebook.com/"+ENV['FACEBOOKER_RELATIVE_URL_ROOT']+"/assignments/#{@assignment.id}"
-        
   end
   
   # TODO: Validation, + regenerate the zip.
   def remove_file
     @assignment = Assignment.find(params[:id])
-    @assignment.remove_file(params[:path])
+    if ((@assignment.facebook_user.id == @fb_user.id) or (@assignment.is_author? @fb_user))
+      @assignment.remove_file(params[:path])
+      ZipWorker.asynch_zip_file(:id => @assignment.id, :target => @assignment.path_to_attachment, :source => @assignment.path_to_folder)
+      render :partial => "file_removed", :layout => false
+    end
   end
 
   def edit_file

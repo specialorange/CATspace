@@ -164,19 +164,18 @@ function unFlashObj(obj) {
 
   function ajaxDeleteFile(id, url, div_id, path){ 
    try {
-		alert("2");
 		//Confirmation Dialog sends request on Confirm    
 	   dlg = new Dialog(); 
 	   dlg.showChoice("Confirm Delete", "Are you sure you want to delete this file?", "Yes", "No"); 
 	   dlg.onconfirm = function() { 
-			//obscure(highlightDiv(div_id).checkpoint()).go();
+			// obscure(highlightDiv(div_id).checkpoint()).go();
 			var ajax = new Ajax();
        		ajax.responseType = Ajax.FBML; 
        		ajax.ondone = function(data) {  
-         		//Delete the div.
+         		// Delete the div.
 				obscure(highlightDiv(div_id).checkpoint()).go();
        		}; 
-       		ajax.post(url+"/"+id, "path="+path); 
+       		ajax.post(url, "path="+path); 
 		}
 	}  
    catch(err) {

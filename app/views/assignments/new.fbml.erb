@@ -1,4 +1,4 @@
-<h1>Post a new assignment</h1>
+<h1>Create a new assignment</h1>
 <div>
 	<div id="contentPanel">
 		<% form_for(@assignment) do |f| %>
@@ -17,11 +17,6 @@
 		    <%= f.text_field :tag_list %>
 		  </p>
 		  <p>
-		    <%= label_tag "Assignment .zip file (You can upload this later)"%><br />
-			<input type="file" id="uploaded_file" name="uploaded_file" />
-		  </p>
-	
-		  <p>
 		    <div class="buttons">
 				<Button>Create Assignment</Button>
 			</div>
@@ -32,7 +27,7 @@
 		 <br>
 		<div class="postIt">
 			<p>When you create an assignment, it would be saved in <strong>unpublished mode</strong>, in which it would be viewable to only you. You can publish it or take it off whenever you wish to.</p>
-			<p> You can choose to upload your assignment's files right now as a .zip file, or you can upload it later. You can also upload and remove individual files from the assignment package once you save it. </p>
+			<p> Once you have created the assignment, you will be able to upload a .zip package for the assignment. You will also be able to upload or remove individual files from the assignment. </p>
 		</div>
 	</div>
 </div>
