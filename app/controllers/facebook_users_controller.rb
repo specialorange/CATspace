@@ -44,9 +44,16 @@ class FacebookUsersController < ApplicationController
     @allUsers = FacebookUser.all
     @catspaceUsers = []
     @facebookerUsers = @user.friends_with_this_app
+
     # TODO: Low priority - make more efficient
     @facebookerUsers.each { |facebooker_user| 
-     @catspaceUsers << FacebookUser.find(:first, :conditions => { :uid => facebooker_user.id })
+      logger.debug { "[DEBUG] #{facebooker_user.class}" }
+      cUser = FacebookUser.find(:first, :conditions => { :uid => facebooker_user.id })
+      if cUser
+        @catspaceUsers << cUser
+      else
+        logger.info { "[INFO] This user is screwing up the DB (Showing UID): #{facebooker_user.id}" }
+      end
     }
     
   end

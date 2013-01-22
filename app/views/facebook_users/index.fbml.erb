@@ -6,6 +6,7 @@
 	</div>
 	
 	<% if @catspaceUsers %>
+		<% logger.debug { "catspaceUsers = #{@catspaceUsers}" }%>
 		<%= render :partial =>"partials/people_sidebar_list", :locals => {:users => @catspaceUsers} %>
 	<% end %>
 	
