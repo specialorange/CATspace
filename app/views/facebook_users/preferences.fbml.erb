@@ -4,7 +4,8 @@
 <% form_for @fb_user, :url => { :action => "prefsave" } do |f| %>
     <%= f.error_messages %>
 <%= f.check_box :pref_comment_notify %> Notify me when people comment on my assignments.<br />
- <%= label_tag "Tag subscriptions: "%> 
+<br>
+ <%= label_tag "Tag subscriptions (Comma separated): "%> 
    <%= f.text_field :tag_list %> <br />
 <input type="submit" value="Submit" />
 <% end %>

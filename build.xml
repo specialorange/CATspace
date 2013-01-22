@@ -1,0 +1,21 @@
+<project name="CATspace" default="deploy" basedir=".">
+
+  <property file="${user.home}/build.properties"/>
+
+  <target name="deploy">
+    <scp trust="true"
+      todir="${CATspace.user}:${CATspace.password}@catspace.web-cat.org:~/catspace/current/">
+    <!-- jar destfile="catspace.jar" -->
+      <fileset dir=".">
+        <exclude name="catspace.jar"/>
+        <exclude name="timestamp"/>
+        <depend targetdir=".">
+          <mapper type="merge" to="timestamp"/>
+        </depend>
+      </fileset>
+    <!-- /jar -->
+    </scp>
+    <touch file="timestamp"/>
+  </target>
+
+</project>

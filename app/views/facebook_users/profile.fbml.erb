@@ -24,7 +24,7 @@ function submitAssignmentAjax(vars) {
 				<h1><%= fb_name(@user.uid, options={:linked => false, :useyou => false}) %></h1>
 				<div id="userProfileInfo">
 					Virginia Tech<br>
-					<%= @user.assignments.count %> Assignments on CATspace.
+					<%= @published_assignments.length %> Assignments on CATspace.
 				</div>
 			</td>		
 		</tr>

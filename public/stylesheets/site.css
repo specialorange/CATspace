@@ -198,6 +198,32 @@ background-color : #FFFF99;
 	zoom: 1;
 }
 
+.boxHeaderNoFloat {
+	background-color: rgb(236, 239, 245);
+	background-image: none;
+	background-repeat: repeat;
+	border-top-color: #47639E;
+	border-top-style: solid;
+	border-top-width: 1px;
+	color: rgb(51, 51, 51);
+	display: block;
+	font-size: 11px;
+	font-weight: bold;
+	height: 13px;
+	margin-bottom: 7px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	padding-bottom: 5px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 5px;
+	position: relative;
+	zoom: 1;
+	float: none;
+	clear: both;
+}
+
 #headerSearchForm {
 	float:right;
 	clear:none;
@@ -440,6 +466,9 @@ textarea:focus {
 .peopleListItem {
 	padding-bottom: 10px;
 	height: 68px;
+	float: left;
+	padding-right: 10px;
+	width: 235px;
 }
 
 .peopleListItemThumb {

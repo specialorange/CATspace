@@ -2,9 +2,9 @@
 	<p align="right">
 		Sort by:
 	  <% if sort == 'date' %>
-			<span class="grayButtonPressed"><%= link_to_remote "Date", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=date')" %></span>
+			<span class="grayButtonPressed"><%= link_to_remote "Latest", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=date')" %></span>
 		<% else %>
-			<span class="grayButton"><%= link_to_remote "Date", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=date')" %></span>	
+			<span class="grayButton"><%= link_to_remote "Latest", "#", :onclick => "submitAssignmentAjax('user=#{user.id}&sort=date')" %></span>	
 		<% end %>
   
 		<% if sort == 'title' %>

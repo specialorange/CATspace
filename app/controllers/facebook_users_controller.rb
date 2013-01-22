@@ -17,15 +17,18 @@ class FacebookUsersController < ApplicationController
     end
     @tags = @user.assignments.tag_counts
     @activity_items = @user.activity_items.sort{|a,b| b.created_at <=> a.created_at}.first(5)
-    @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => @user.id },:order => 'created_at DESC'
-    
+
     if(@user.id == @fb_user.id)
       @self = true
-      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => @user.id },:order => 'created_at DESC'
+      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => ["facebook_user_id = ? OR id in (SELECT assignment_id AS id FROM authorships WHERE facebook_user_uid = ?)", @user.id, @user.uid ],:order => 'created_at DESC'
     else
       @self = false
-      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => @user.id, :published => true },:order => 'created_at DESC'
+      @sorted_assignments = Assignment.paginate :page => params[:page], :conditions => ["(facebook_user_id = ? OR id in (SELECT assignment_id AS id FROM authorships WHERE facebook_user_uid = ?)) AND published = true", @user.id, @user.uid ],:order => 'created_at DESC'
     end
+    
+      # TODO: Do a count query here later
+      @published_assignments = Assignment.find :all, :conditions => ["(facebook_user_id = ? OR id in (SELECT assignment_id AS id FROM authorships WHERE facebook_user_uid = ?)) AND published = true", @user.id, @user.uid ]
+    
   end  
   
   def index
@@ -61,16 +64,24 @@ class FacebookUsersController < ApplicationController
   def list_assignments
     user = FacebookUser.find(params[:user])
     sort = params[:sort]
-    if sort == 'title'
-      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'title ASC'
-    elsif sort == 'date'
-      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'created_at DESC'
-    elsif sort == 'rating'
-      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'rating DESC'
-    elsif sort == 'comments'
-      sorted_assignments = user.assignments.sort {|a,b| b.comments.count <=> a.comments.count}
+    
+    if user.id == @fb_user.id
+      query = "facebook_user_id = ? OR id in (SELECT assignment_id AS id FROM authorships WHERE facebook_user_uid = ?)"
     else
-      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => {:facebook_user_id => user.id },:order => 'created_at DESC'
+      query = "(facebook_user_id = ? OR id in (SELECT assignment_id AS id FROM authorships WHERE facebook_user_uid = ?)) AND published = true"
+    end
+    
+    if sort == 'title'
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => [query, user.id, user.uid ],:order => 'title ASC'
+    elsif sort == 'date'
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => [query, user.id, user.uid ],:order => 'created_at DESC'
+    elsif sort == 'rating'
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => [query, user.id, user.uid ],:order => 'rating DESC'
+    elsif sort == 'comments'
+      # TODO: Sorting for comments
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => [query, user.id, user.uid ],:order => 'rating DESC'
+    else
+      sorted_assignments = Assignment.paginate :page => params[:page], :conditions => [query, user.id, user.uid ],:order => 'created_at DESC'
     end
     render :partial => "ajaxy_list", :locals => {:user => user, :assignments => sorted_assignments, :sort => sort}, :layout => false
   end  
